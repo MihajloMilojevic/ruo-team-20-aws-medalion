@@ -1,0 +1,10 @@
+output "ingestion_lambda_arn"      { value = aws_lambda_function.ingestion.arn }
+output "ingestion_lambda_name"     { value = aws_lambda_function.ingestion.function_name }
+output "normalization_lambda_arn"  { value = aws_lambda_function.normalization.arn }
+output "normalization_lambda_name" { value = aws_lambda_function.normalization.function_name }
+output "analytics_lambda_arn"      { value = aws_lambda_function.analytics.arn }
+output "analytics_lambda_name"     { value = aws_lambda_function.analytics.function_name }
+output "delivery_lambda_arn"       { value = aws_lambda_function.delivery.arn }
+output "delivery_lambda_name"      { value = aws_lambda_function.delivery.function_name }
+output "notification_lambda_arn"   { value = aws_lambda_function.notification.arn }
+output "notification_lambda_name"  { value = aws_lambda_function.notification.function_name }

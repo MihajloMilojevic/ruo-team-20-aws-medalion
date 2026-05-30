@@ -1,0 +1,9 @@
+variable "project_name"             { type = string }
+variable "environment"               { type = string }
+variable "ingestion_lambda_arn"      { type = string }
+variable "ingestion_lambda_name"     { type = string }
+variable "notification_lambda_arn"   { type = string }
+variable "notification_lambda_name"  { type = string }
+variable "normalization_lambda_name" { type = string }
+variable "analytics_lambda_name"     { type = string }
+variable "delivery_lambda_name"      { type = string }
