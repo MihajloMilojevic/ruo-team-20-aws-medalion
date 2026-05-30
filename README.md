@@ -1,111 +1,161 @@
-# Social Media Data Pipeline — AWS Medalion Arhitektura
+# Social Media Data Pipeline — AWS Medallion Architecture
 
-Projekat iz predmeta **Računarstvo u oblaku**. Platforma za prikupljanje, procesiranje, čuvanje i analizu podataka sa Hacker News i X (Twitter) platformi, implementirana na AWS-u prateći Medalion arhitekturu.
+A university project for the **Cloud Computing** course. A platform for collecting, processing, storing, and analyzing data from Hacker News and X (Twitter), built on AWS following the Medallion architecture.
 
-## Arhitektura
+## Architecture
 
 ```
-[EventBridge Timer] (jednom dnevno)
+[EventBridge Timer] (daily at 02:00 UTC)
         │
         ▼
-┌─────────────────┐
-│  1. Ingestion   │ → S3 bronze/  (sirovi JSON)
-│     Lambda      │
-└─────────────────┘
+┌──────────────────┐
+│  1. Ingestion    │ → S3 bronze/  (raw JSON, one file per item type)
+│     Lambda       │
+└──────────────────┘
         │
         ▼
-┌─────────────────┐
-│ 2. Normalization│ → S3 silver/ (Parquet, particionisano)
-│     Lambda      │
-└─────────────────┘
+┌──────────────────┐
+│ 2. Normalization │ → S3 silver/  (Parquet, partitioned)
+│     Lambda       │
+└──────────────────┘
         │
         ▼
-┌─────────────────┐
-│ 3. Transformation│ → S3 gold/  (Parquet, metrike/KPI)
-│     Lambda      │
-└─────────────────┘
+┌──────────────────┐
+│  3. Analytics    │ → S3 gold/    (Parquet, metrics/KPIs)
+│     Lambda       │
+└──────────────────┘
         │
         ▼
-┌─────────────────┐
-│  4. Delivery   │ → PostgreSQL (EC2)
-│     Lambda     │
-└─────────────────┘
+┌──────────────────┐
+│  4. Delivery     │ → PostgreSQL  (EC2)
+│     Lambda       │
+└──────────────────┘
         │
         ▼
-  Apache Superset (EC2, Docker)
+  Apache Superset  (EC2, Docker)
 
-  ─── Svaka Lambda: Greška → Notification Lambda → Discord ───
+  ── On any Lambda error: CloudWatch Alarm → SNS → Notification Lambda → Discord ──
 ```
 
-## Struktura projekta
+## Project Structure
 
 ```
 social-media-pipeline/
 │
 ├── modules/
-│   ├── networking/      # VPC, Subnets, Security Groups, NAT Gateway
-│   ├── storage/         # S3 Data Lake (bronze/silver/gold)
-│   ├── compute/         # Lambda funkcije, IAM Role-ovi, EC2
-│   └── orchestration/   # Step Functions, EventBridge
+│   ├── networking/      # VPC, subnets, IGW, S3 Gateway Endpoint, security groups
+│   ├── storage/         # S3 Data Lake (bronze / silver / gold)
+│   ├── security/        # IAM roles and policies (one role per Lambda)
+│   ├── compute/         # Lambda function definitions
+│   └── orchestration/   # EventBridge schedule, SNS topic, CloudWatch alarms
 │
 ├── src/
-│   ├── ingestion/       # Lambda: Hacker News API → S3 bronze
-│   ├── normalization/   # Lambda: bronze → silver (Parquet, awswrangler)
-│   ├── analytics/       # Lambda: silver → gold (metrike, KPI)
-│   └── delivery/        # Lambda: gold → PostgreSQL
+│   ├── ingestion/       # Bronze: Hacker News API → S3
+│   ├── normalization/   # Silver: bronze → Parquet (not yet implemented)
+│   ├── analytics/       # Gold: metrics and KPIs (not yet implemented)
+│   ├── delivery/        # Delivery: gold → PostgreSQL (not yet implemented)
+│   └── notification/    # Discord notifications via SNS
 │
 ├── main.tf
 ├── variables.tf
 ├── outputs.tf
 ├── terraform.tfvars.example
+├── docker-compose.localstack.yml
+├── start.sh
 └── .gitignore
 ```
 
-## Redosled implementacije
+## Implementation Status
 
-| Korak | Modul | Status |
-|-------|-------|--------|
-| 1 | `modules/networking` + `modules/storage` | ✅ Implementirano |
-| 2 | `src/ingestion` + `modules/compute` (Bronze Lambda) | 🔜 Sledeće |
-| 3 | `src/normalization` (Silver Lambda + awswrangler) | ⏳ Na čekanju |
-| 4 | `src/analytics` (Gold Lambda) | ⏳ Na čekanju |
-| 5 | `src/delivery` + EC2 + Superset | ⏳ Na čekanju |
-| 6 | `modules/orchestration` (Step Functions + Discord) | ⏳ Na čekanju |
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 1 | Infrastructure — all Terraform modules | ✅ Done |
+| 2 | Bronze — Hacker News ingestion Lambda | ✅ Done |
+| 3 | Notifications — Discord via SNS + CloudWatch alarms | ✅ Done |
+| 4 | Silver — normalization Lambda (awswrangler, Parquet) | 🔜 Next |
+| 5 | Gold — analytics Lambda (metrics, KPIs) | ⏳ Pending |
+| 6 | Delivery — PostgreSQL + EC2 + Superset | ⏳ Pending |
+| 7 | Orchestration — Step Functions for the full pipeline | ⏳ Pending |
 
-## Pokretanje
+## Prerequisites
 
-### Preduslovi
 - [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.5.0
-- [AWS CLI](https://aws.amazon.com/cli/) konfigurisan (`aws configure`)
-- AWS nalog (Free Tier dovoljan)
+- [AWS CLI](https://aws.amazon.com/cli/) configured (`aws configure`)
+- AWS account (Free Tier is sufficient)
+- Python 3.12+ with a virtual environment (`python -m venv .venv`)
+- [Docker](https://www.docker.com/) (for local testing with LocalStack)
 
-### Setup
+## Running on AWS
 
 ```bash
-# 1. Klonirajte repo
-git clone <repo-url>
-cd social-media-pipeline
+# 1. Clone the repo
+git clone https://github.com/MihajloMilojevic/ruo-team-20-aws-medalion
+cd ruo-team-20-aws-medalion
 
-# 2. Kreirajte terraform.tfvars
+# 2. Create terraform.tfvars from the example
 cp terraform.tfvars.example terraform.tfvars
-# Popunite discord_webhook_url u terraform.tfvars
+# Fill in discord_webhook_url in terraform.tfvars
 
-# 3. Inicijalizujte Terraform
+# 3. Initialize Terraform
 terraform init
 
-# 4. Pregled plana
+# 4. Review the plan
 terraform plan
 
-# 5. Primenite infrastrukturu
+# 5. Apply
 terraform apply
 ```
 
-## AWS Free Tier resursi koji se koriste
+## Running Locally (LocalStack)
 
-| Servis | Free Tier limit | Korišćenje |
-|--------|----------------|-----------|
-| S3 | 5 GB | Data Lake (bronze/silver/gold) |
-| Lambda | 1M zahteva/mesec | 4 funkcije × 1/dan |
-| Step Functions | 4.000 tranzicija/mesec | 1 workflow/dan |
-| EC2 t2.micro | 750 h/mesec | Superset + PostgreSQL |
-| EventBridge | Besplatno | Dnevni okidač |
+```bash
+# 1. Install dependencies
+pip install terraform-local localstack
+
+# 2. Create a .env file
+cp terraform.tfvars.example terraform.tfvars
+cat > .env << EOF
+LOCALSTACK_AUTH_TOKEN=your_token_here   # optional, community version works without it
+AWS_ACCESS_KEY_ID=test
+AWS_SECRET_ACCESS_KEY=test
+AWS_DEFAULT_REGION=eu-central-1
+EOF
+
+# 3. Start LocalStack and apply Terraform
+./start.sh
+```
+
+To manually invoke the ingestion Lambda:
+```bash
+aws --endpoint-url=http://localhost:4566 lambda invoke \
+  --function-name social-media-pipeline-dev-ingestion \
+  --payload '{}' output.json && cat output.json
+```
+
+To backfill a specific date:
+```bash
+aws --endpoint-url=http://localhost:4566 lambda invoke \
+  --function-name social-media-pipeline-dev-ingestion \
+  --payload '{"date": "2026-01-15"}' output.json
+```
+
+## AWS Free Tier Resources
+
+| Service | Free Tier limit | Usage |
+|---------|----------------|-------|
+| S3 | 5 GB | Data Lake (bronze / silver / gold) |
+| Lambda | 1M requests/month | 5 functions × 1/day |
+| SNS | 1M publishes/month | Error notifications |
+| CloudWatch | 10 alarms | One per Lambda function |
+| EC2 t2.micro | 750 h/month | Superset + PostgreSQL (Phase 6) |
+| EventBridge | Free | Daily trigger |
+
+## Key Design Decisions
+
+**No NAT Gateway** — Lambdas that need internet access (ingestion, notification) run outside the VPC. Lambdas that only need S3 or PostgreSQL run inside the VPC and use a free S3 Gateway Endpoint. This avoids the ~$32/month NAT Gateway cost.
+
+**One IAM role per Lambda** — Each Lambda has exactly the S3 permissions it needs (`bronze/*` write for ingestion, `bronze/*` read + `silver/*` write for normalization, etc.). No shared roles.
+
+**_SUCCESS marker pattern** — The ingestion Lambda writes one JSON file per item type and only writes `_SUCCESS` after all files succeed. The normalization Lambda will not process a partition without this marker, preventing partial data from entering the silver layer.
+
+**Step Functions planned** — The current EventBridge → Lambda chain will be replaced with a Step Functions state machine in Phase 7. This will also remove the `notify_on_error` decorator, which currently cannot reach SNS from inside the VPC.
