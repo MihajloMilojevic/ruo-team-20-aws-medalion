@@ -50,32 +50,34 @@ resource "aws_iam_role_policy_attachment" "ingestion_logs" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# ── Normalization Lambda ──────────────────────────────────────────────────────
-# Inside VPC. Reads bronze/, writes silver/. Requires the VPC execution role
-# because AWS creates an ENI for the Lambda when it runs inside a VPC.
+# ── Normalization Lambdas (Silver) ────────────────────────────────────────────
+# Inside VPC. Two separate Lambdas/roles (normalization_hn, normalization_x) —
+# see SILVER_LAYER_HANDOFF.md section 1 for why they're split. Each reads only
+# its own Bronze prefix and writes silver/*. Both require the VPC execution
+# role because AWS creates an ENI for the Lambda when it runs inside a VPC.
 
-resource "aws_iam_role" "normalization" {
-  name               = "${var.project_name}-${var.environment}-normalization-role"
+resource "aws_iam_role" "normalization_hn" {
+  name               = "${var.project_name}-${var.environment}-normalization-hn-role"
   assume_role_policy = local.lambda_trust_policy
 }
 
-resource "aws_iam_role_policy" "normalization_s3" {
-  name = "s3-bronze-read-silver-write"
-  role = aws_iam_role.normalization.id
+resource "aws_iam_role_policy" "normalization_hn_s3" {
+  name = "s3-bronze-hn-read-silver-write"
+  role = aws_iam_role.normalization_hn.id
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Sid      = "ReadBronze"
+        Sid      = "ReadBronzeHN"
         Effect   = "Allow"
         Action   = ["s3:GetObject"]
-        Resource = "${var.data_lake_bucket_arn}/bronze/*"
+        Resource = "${var.data_lake_bucket_arn}/bronze/hacker_news/*"
       },
       {
-        Sid      = "WriteSilver"
+        Sid      = "ReadWriteSilver"
         Effect   = "Allow"
-        Action   = ["s3:PutObject"]
+        Action   = ["s3:GetObject", "s3:PutObject"]
         Resource = "${var.data_lake_bucket_arn}/silver/*"
       },
       {
@@ -88,8 +90,47 @@ resource "aws_iam_role_policy" "normalization_s3" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "normalization_logs" {
-  role       = aws_iam_role.normalization.name
+resource "aws_iam_role_policy_attachment" "normalization_hn_logs" {
+  role       = aws_iam_role.normalization_hn.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
+resource "aws_iam_role" "normalization_x" {
+  name               = "${var.project_name}-${var.environment}-normalization-x-role"
+  assume_role_policy = local.lambda_trust_policy
+}
+
+resource "aws_iam_role_policy" "normalization_x_s3" {
+  name = "s3-bronze-x-read-silver-write"
+  role = aws_iam_role.normalization_x.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "ReadBronzeX"
+        Effect   = "Allow"
+        Action   = ["s3:GetObject"]
+        Resource = "${var.data_lake_bucket_arn}/bronze/x/*"
+      },
+      {
+        Sid      = "ReadWriteSilver"
+        Effect   = "Allow"
+        Action   = ["s3:GetObject", "s3:PutObject"]
+        Resource = "${var.data_lake_bucket_arn}/silver/*"
+      },
+      {
+        Sid      = "ListBucket"
+        Effect   = "Allow"
+        Action   = ["s3:ListBucket"]
+        Resource = var.data_lake_bucket_arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "normalization_x_logs" {
+  role       = aws_iam_role.normalization_x.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 

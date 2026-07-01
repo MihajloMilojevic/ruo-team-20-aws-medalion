@@ -3,7 +3,7 @@
 
 locals {
   public_lambdas = ["ingestion", "notification"]
-  vpc_lambdas    = ["normalization", "analytics", "delivery"]
+  vpc_lambdas    = ["normalization_hn", "normalization_x", "analytics", "delivery"]
 }
 
 # ── Log groups ────────────────────────────────────────────────────────────────
@@ -23,10 +23,16 @@ data "archive_file" "ingestion" {
   output_path = "${path.root}/src/ingestion/package.zip"
 }
 
-data "archive_file" "normalization" {
+data "archive_file" "normalization_hn" {
   type        = "zip"
-  source_dir  = "${path.root}/src/normalization"
-  output_path = "${path.root}/src/normalization/package.zip"
+  source_dir  = "${path.root}/src/normalization_hn"
+  output_path = "${path.root}/src/normalization_hn/package.zip"
+}
+
+data "archive_file" "normalization_x" {
+  type        = "zip"
+  source_dir  = "${path.root}/src/normalization_x"
+  output_path = "${path.root}/src/normalization_x/package.zip"
 }
 
 data "archive_file" "analytics" {
@@ -72,16 +78,16 @@ resource "aws_lambda_function" "ingestion" {
   tags       = { Layer = "Bronze" }
 }
 
-resource "aws_lambda_function" "normalization" {
-  function_name    = "${var.project_name}-${var.environment}-normalization"
-  description      = "Silver: normalizes bronze data and writes Parquet to S3"
-  filename         = data.archive_file.normalization.output_path
-  source_code_hash = data.archive_file.normalization.output_base64sha256
+resource "aws_lambda_function" "normalization_hn" {
+  function_name    = "${var.project_name}-${var.environment}-normalization-hn"
+  description      = "Silver: normalizes Hacker News bronze data and writes Parquet to S3"
+  filename         = data.archive_file.normalization_hn.output_path
+  source_code_hash = data.archive_file.normalization_hn.output_base64sha256
   runtime          = "python3.12"
   handler          = "lambda_function.lambda_handler"
   timeout          = 300
   memory_size      = 512
-  role             = var.normalization_role_arn
+  role             = var.normalization_hn_role_arn
 
   vpc_config {
     subnet_ids         = var.vpc_subnet_ids
@@ -94,7 +100,33 @@ resource "aws_lambda_function" "normalization" {
     }
   }
 
-  depends_on = [aws_cloudwatch_log_group.lambdas["normalization"]]
+  depends_on = [aws_cloudwatch_log_group.lambdas["normalization_hn"]]
+  tags       = { Layer = "Silver" }
+}
+
+resource "aws_lambda_function" "normalization_x" {
+  function_name    = "${var.project_name}-${var.environment}-normalization-x"
+  description      = "Silver: normalizes X/Twitter bronze data and writes Parquet to S3"
+  filename         = data.archive_file.normalization_x.output_path
+  source_code_hash = data.archive_file.normalization_x.output_base64sha256
+  runtime          = "python3.12"
+  handler          = "lambda_function.lambda_handler"
+  timeout          = 300
+  memory_size      = 512
+  role             = var.normalization_x_role_arn
+
+  vpc_config {
+    subnet_ids         = var.vpc_subnet_ids
+    security_group_ids = var.vpc_security_group_ids
+  }
+
+  environment {
+    variables = {
+      DATA_LAKE_BUCKET = var.data_lake_bucket_name
+    }
+  }
+
+  depends_on = [aws_cloudwatch_log_group.lambdas["normalization_x"]]
   tags       = { Layer = "Silver" }
 }
 

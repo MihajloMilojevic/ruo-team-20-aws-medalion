@@ -10,8 +10,12 @@ output "ingestion_lambda_name" {
   value = module.compute.ingestion_lambda_name
 }
 
-output "normalization_lambda_name" {
-  value = module.compute.normalization_lambda_name
+output "normalization_hn_lambda_name" {
+  value = module.compute.normalization_hn_lambda_name
+}
+
+output "normalization_x_lambda_name" {
+  value = module.compute.normalization_x_lambda_name
 }
 
 output "analytics_lambda_name" {

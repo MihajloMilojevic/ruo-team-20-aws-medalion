@@ -51,7 +51,8 @@ resource "aws_lambda_permission" "sns_notification" {
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   for_each = toset([
     var.ingestion_lambda_name,
-    var.normalization_lambda_name,
+    var.normalization_hn_lambda_name,
+    var.normalization_x_lambda_name,
     var.analytics_lambda_name,
     var.delivery_lambda_name,
   ])

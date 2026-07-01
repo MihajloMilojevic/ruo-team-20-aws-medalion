@@ -49,7 +49,8 @@ module "orchestration" {
   ingestion_lambda_name     = module.compute.ingestion_lambda_name
   notification_lambda_arn   = module.compute.notification_lambda_arn
   notification_lambda_name  = module.compute.notification_lambda_name
-  normalization_lambda_name = module.compute.normalization_lambda_name
+  normalization_hn_lambda_name = module.compute.normalization_hn_lambda_name
+  normalization_x_lambda_name  = module.compute.normalization_x_lambda_name
   analytics_lambda_name     = module.compute.analytics_lambda_name
   delivery_lambda_name      = module.compute.delivery_lambda_name
 }
@@ -69,7 +70,8 @@ module "compute" {
   environment            = var.environment
   data_lake_bucket_name  = module.storage.data_lake_bucket_name
   ingestion_role_arn     = module.security.ingestion_role_arn
-  normalization_role_arn = module.security.normalization_role_arn
+  normalization_hn_role_arn = module.security.normalization_hn_role_arn
+  normalization_x_role_arn  = module.security.normalization_x_role_arn
   analytics_role_arn     = module.security.analytics_role_arn
   delivery_role_arn      = module.security.delivery_role_arn
   notification_role_arn  = module.security.notification_role_arn
