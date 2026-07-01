@@ -4,6 +4,12 @@
 locals {
   public_lambdas = ["ingestion", "notification"]
   vpc_lambdas    = ["normalization_hn", "normalization_x", "analytics", "delivery"]
+
+  # AWS-hosted awswrangler layer (AWS SDK for pandas). Not built by this
+  # project — we just reference the publicly published layer version, region
+  # is the only part that varies (the account id 336392948345 is AWS's own
+  # publishing account and is fixed across all regions).
+  awswrangler_layer_arn = "arn:aws:lambda:${var.aws_region}:336392948345:layer:AWSSDKPandas-Python312:29"
 }
 
 # ── Log groups ────────────────────────────────────────────────────────────────
@@ -14,6 +20,28 @@ resource "aws_cloudwatch_log_group" "lambdas" {
 
   name              = "/aws/lambda/${var.project_name}-${var.environment}-${each.key}"
   retention_in_days = 7
+}
+
+# ── Lambda Layers ─────────────────────────────────────────────────────────────
+# awswrangler: no layer resource needed here, it's already hosted by AWS —
+# see local.awswrangler_layer_arn above, referenced directly in each function.
+
+# silver_common: our own layer. Contains silver_common.py (shared Silver
+# helpers used by normalization_hn and normalization_x) plus beautifulsoup4,
+# installed manually into layers/silver_common/python/ (see
+# layers/silver_common/README.md) since this project has no build step.
+data "archive_file" "silver_common_layer" {
+  type        = "zip"
+  source_dir  = "${path.root}/src/layers/silver_common/python"
+  output_path = "${path.root}/src/layers/silver_common_layer.zip"
+}
+
+resource "aws_lambda_layer_version" "silver_common" {
+  layer_name          = "${var.project_name}-${var.environment}-silver-common"
+  description         = "Shared Silver layer helpers (silver_common.py) + beautifulsoup4"
+  filename            = data.archive_file.silver_common_layer.output_path
+  source_code_hash    = data.archive_file.silver_common_layer.output_base64sha256
+  compatible_runtimes = ["python3.12"]
 }
 
 # ── Code packaging ────────────────────────────────────────────────────────────
@@ -89,6 +117,13 @@ resource "aws_lambda_function" "normalization_hn" {
   memory_size      = 512
   role             = var.normalization_hn_role_arn
 
+  # awswrangler from the AWS-hosted layer, silver_common.py + bs4 from our
+  # own layer. Neither is bundled into package.zip anymore.
+  layers = [
+    local.awswrangler_layer_arn,
+    aws_lambda_layer_version.silver_common.arn,
+  ]
+
   vpc_config {
     subnet_ids         = var.vpc_subnet_ids
     security_group_ids = var.vpc_security_group_ids
@@ -115,6 +150,13 @@ resource "aws_lambda_function" "normalization_x" {
   memory_size      = 512
   role             = var.normalization_x_role_arn
 
+  # Same two layers as normalization_hn — same shared helpers, same
+  # dependency set.
+  layers = [
+    local.awswrangler_layer_arn,
+    aws_lambda_layer_version.silver_common.arn,
+  ]
+
   vpc_config {
     subnet_ids         = var.vpc_subnet_ids
     security_group_ids = var.vpc_security_group_ids
@@ -140,6 +182,12 @@ resource "aws_lambda_function" "analytics" {
   timeout          = 300
   memory_size      = 512
   role             = var.analytics_role_arn
+
+  # awswrangler only — analytics keeps gold_common.py bundled in its own
+  # package.zip (not extracted to a layer).
+  layers = [
+    local.awswrangler_layer_arn,
+  ]
 
   vpc_config {
     subnet_ids         = var.vpc_subnet_ids

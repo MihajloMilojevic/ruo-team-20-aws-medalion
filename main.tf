@@ -78,4 +78,5 @@ module "compute" {
   vpc_subnet_ids         = module.networking.public_subnet_ids
   vpc_security_group_ids = [module.networking.lambda_vpc_sg_id]
   discord_webhook_url    = var.discord_webhook_url
+  aws_region             = var.aws_region
 }

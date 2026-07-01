@@ -10,3 +10,6 @@ output "delivery_lambda_arn"          { value = aws_lambda_function.delivery.arn
 output "delivery_lambda_name"         { value = aws_lambda_function.delivery.function_name }
 output "notification_lambda_arn"      { value = aws_lambda_function.notification.arn }
 output "notification_lambda_name"     { value = aws_lambda_function.notification.function_name }
+
+output "awswrangler_layer_arn"        { value = local.awswrangler_layer_arn }
+output "silver_common_layer_arn"      { value = aws_lambda_layer_version.silver_common.arn }

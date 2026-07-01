@@ -80,7 +80,7 @@ resource "aws_vpc_endpoint" "s3" {
 # defined as a separate resource below to avoid a cyclic dependency.
 resource "aws_security_group" "lambda_vpc" {
   name        = "${var.project_name}-${var.environment}-lambda-vpc-sg"
-  description = "VPC Lambda functions — egress to Postgres and S3 endpoint only"
+  description = "VPC Lambda functions - egress to Postgres and S3 endpoint only"
   vpc_id      = aws_vpc.main.id
 
   tags = {
