@@ -142,3 +142,21 @@ resource "aws_security_group_rule" "ec2_ingress_postgres" {
   security_group_id        = aws_security_group.ec2.id
   source_security_group_id = aws_security_group.lambda_vpc.id
 }
+
+# Without this, lambda_vpc has NO egress rule for S3 at all — the Gateway
+# Endpoint only fixes routing, it does not implicitly permit traffic. A
+# security group managed by Terraform with no inline `egress` block gets
+# NO outbound rules (not the AWS-default allow-all), so every S3 call from
+# a VPC Lambda (normalization_hn/x, analytics, delivery) silently hangs
+# until it times out, with nothing ever reaching CloudWatch Logs — no
+# response ever comes back to log. Scoped to the S3 prefix list rather than
+# 0.0.0.0/0 to keep this least-privilege, matching the rest of the module.
+resource "aws_security_group_rule" "lambda_egress_s3" {
+  type              = "egress"
+  description       = "Lambda to S3 via Gateway Endpoint"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  security_group_id = aws_security_group.lambda_vpc.id
+  prefix_list_ids   = [aws_vpc_endpoint.s3.prefix_list_id]
+}

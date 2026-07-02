@@ -3,29 +3,43 @@ Silver layer — X (Twitter) normalization
 ==========================================
 Reads the Bronze X data prepared locally by build_chunks.py and uploaded to
 bronze/x/ (see SILVER_LAYER_HANDOFF.md, section 3), normalizes it, and
-writes the shared Silver schema (section 4) as partitioned Parquet under
-silver/ — the SAME tables normalization_hn writes, via
-mode="overwrite_partitions" so the two Lambdas never clobber each other's
-partitions.
+writes the shared Silver schema (section 4) as Parquet under silver/ — the
+SAME tables normalization_hn writes.
+
+Scope: COVID and Bitcoin (gpreda-style CSV) only. Congress support has been
+removed from the project — there is no NDJSON/Twitter-API-JSON branch here
+anymore, dispatch is purely CSV.
 
 Bronze layout recap:
-    bronze/x/congress_users.json                     <- NDJSON, whole file, root-level
     bronze/x/year=YYYY/month=MM/day=DD/covid.csv      <- gpreda CSV
     bronze/x/year=YYYY/month=MM/day=DD/bitcoin.csv    <- gpreda CSV
-    bronze/x/year=YYYY/month=MM/day=DD/congress.json  <- NDJSON tweets
     bronze/x/year=YYYY/month=MM/day=DD/_SUCCESS
 
-Every X day is single-source (the 3 datasets cover non-overlapping date
+Every X day is single-source (COVID and Bitcoin cover non-overlapping date
 ranges), so the parser to use is dispatched purely by filename.
 
+Performance rewrite (see KNOWLEDGE.md 9.11), mirroring normalization_hn:
+  - No pandas anywhere — CSV rows are read with the stdlib `csv` module and
+    processed as plain dicts, dropping the pandas `iterrows()` loop (one of
+    the slowest common pandas patterns) entirely.
+  - No read-modify-write "upsert" — every output table is written as one
+    small Parquet object per (day, source) at a deterministic key
+    (silver_common.put_parquet), instead of reading back the whole existing
+    table on every invocation. See put_parquet's docstring for the full
+    rationale; this was the actual cause of Silver Lambda timeouts.
+  - Malformed CSV rows (the Bitcoin dataset has some) are skipped
+    defensively by comparing field count against the header, replacing the
+    old `pandas.read_csv(engine="python", on_bad_lines="skip")` fallback.
+
 Invocation modes (event):
-    {"date": "YYYY-MM-DD"}           -> normalize a single day
-    {"prefix": "year=.../month=.../day=..."} -> normalize an explicit partition
-    {"full_scan": true}              -> walk every day partition under bronze/x/
+    {"date": "YYYY-MM-DD"}                    -> normalize a single day
+    {"prefix": "year=.../month=.../day=..."}  -> normalize an explicit partition
+    {"full_scan": true}                       -> walk every day partition under bronze/x/
     (X datasets are bulk-uploaded by hand, so unlike HN there is no
     "yesterday" default — the caller must say what to process.)
 """
 
+import csv
 import io
 import logging
 import os
@@ -33,32 +47,30 @@ from collections import defaultdict
 from datetime import datetime, timezone
 
 import boto3
+from botocore.config import Config
 
 from silver_common import (
     check_success,
     extract_hashtags,
     extract_urls,
     parse_hashtag_list,
+    put_parquet,
+    run_tag,
+    silver_key,
     stable_id,
     strip_html,
     str_datetime_to_iso,
     synth_post_id,
-    upsert_dimension_table,
-    upsert_users,
     url_domain,
     user_id_for,
-    write_partitioned,
-    append_partitioned,
 )
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-s3 = boto3.client("s3")
+s3 = boto3.client("s3", config=Config(max_pool_connections=20))
 
 PLATFORM = "X"
-
-
 
 
 # ── Partition discovery ────────────────────────────────────────────────────────
@@ -83,46 +95,95 @@ def list_partition_files(bucket: str, full_prefix: str) -> set[str]:
     return {obj["Key"].split("/")[-1] for obj in resp.get("Contents", []) if obj["Key"]}
 
 
+# ── small parsing helpers (stdlib only) ─────────────────────────────────────────
+
+def _clean(v) -> str | None:
+    if v is None:
+        return None
+    v = v.strip()
+    return v or None
+
+
+def _to_int(v) -> int | None:
+    v = _clean(v)
+    if v is None:
+        return None
+    try:
+        return int(float(v))
+    except ValueError:
+        return None
+
+
+def _to_bool(v) -> bool | None:
+    v = _clean(v)
+    if v is None:
+        return None
+    return v.strip().lower() in ("true", "1", "yes")
+
 
 # ── gpreda CSV parser (covid.csv / bitcoin.csv — identical column set) ──────────
 
-def process_gpreda_csv(bucket: str, key: str, source_dataset: str) -> dict:
-    import pandas as pd
+EXPECTED_COLUMNS = {
+    "user_name", "user_location", "user_description", "user_created",
+    "user_followers", "user_friends", "user_favourites", "user_verified",
+    "date", "text", "hashtags", "source", "is_retweet",
+}
 
+
+def iter_gpreda_rows(raw_bytes: bytes):
+    """Yields dict rows from a gpreda-format CSV, skipping malformed rows
+    (wrong field count relative to the header) instead of raising — the
+    stdlib replacement for pandas' engine="python", on_bad_lines="skip"."""
+    text_stream = io.StringIO(raw_bytes.decode("utf-8", errors="replace"))
+    reader = csv.reader(text_stream)
+    try:
+        header = next(reader)
+    except StopIteration:
+        return
+    n_cols = len(header)
+    skipped = 0
+    for raw_row in reader:
+        if len(raw_row) != n_cols:
+            skipped += 1
+            continue
+        yield dict(zip(header, raw_row))
+    if skipped:
+        logger.warning(f"Skipped {skipped} malformed row(s)")
+
+
+def process_gpreda_csv(bucket: str, key: str, source_dataset: str) -> dict:
     obj = s3.get_object(Bucket=bucket, Key=key)
-    # engine="python" + on_bad_lines="skip": defensive against malformed rows,
-    # same fallback build_chunks.py already applies to the Bitcoin dataset.
-    df_raw = pd.read_csv(io.BytesIO(obj["Body"].read()), engine="python", on_bad_lines="skip")
+    raw_bytes = obj["Body"].read()
 
     posts_rows, snapshot_rows = [], []
-    hashtag_rows, post_hashtag_rows = [], []
-    url_rows, post_url_rows = [], []
+    hashtag_map: dict[str, dict] = {}
+    post_hashtag_rows = []
+    url_map: dict[str, dict] = {}
+    post_url_rows = []
     sources_seen: dict[str, str] = {}
     user_latest: dict[str, dict] = {}
 
-    for _, r in df_raw.iterrows():
-        user_name = r.get("user_name")
-        if pd.isna(user_name) or not str(user_name).strip():
+    for r in iter_gpreda_rows(raw_bytes):
+        user_name = _clean(r.get("user_name"))
+        if not user_name:
             continue
-        user_name = str(user_name).strip()
 
-        date_raw = r.get("date")
-        date_str = str(date_raw) if pd.notna(date_raw) else None
+        date_str = _clean(r.get("date"))
         created_at = str_datetime_to_iso(date_str) if date_str else None
 
-        text = r.get("text") if pd.notna(r.get("text")) else None
+        text = _clean(r.get("text"))
         content_text = strip_html(text)
 
         post_id = synth_post_id(user_name, date_str or "", text or "")
         author_user_id = user_id_for(PLATFORM, user_name)
 
-        source_name = str(r.get("source")).strip() if pd.notna(r.get("source")) else None
+        source_name = _clean(r.get("source"))
         source_id = None
         if source_name:
             source_id = stable_id("source", source_name)
             sources_seen[source_id] = source_name
 
-        is_retweet = bool(r.get("is_retweet")) if pd.notna(r.get("is_retweet")) else False
+        is_retweet = bool(_to_bool(r.get("is_retweet")))
 
         posts_rows.append({
             "post_id":        post_id,
@@ -142,8 +203,7 @@ def process_gpreda_csv(bucket: str, key: str, source_dataset: str) -> dict:
             "source_dataset": source_dataset,
         })
 
-        followers = r.get("user_followers")
-        followers = int(followers) if pd.notna(followers) else None
+        followers = _to_int(r.get("user_followers"))
         snapshot_rows.append({
             "user_id":         author_user_id,
             "captured_at":     created_at,
@@ -154,12 +214,12 @@ def process_gpreda_csv(bucket: str, key: str, source_dataset: str) -> dict:
         tags = set(parse_hashtag_list(r.get("hashtags"))) | set(extract_hashtags(text))
         for tag in tags:
             hashtag_id = stable_id("hashtag", tag)
-            hashtag_rows.append({"hashtag_id": hashtag_id, "tag": tag})
+            hashtag_map[hashtag_id] = {"hashtag_id": hashtag_id, "tag": tag}
             post_hashtag_rows.append({"post_id": post_id, "hashtag_id": hashtag_id})
 
         for url in extract_urls(text):
             url_id = stable_id("url", url)
-            url_rows.append({"url_id": url_id, "url": url, "domain": url_domain(url)})
+            url_map[url_id] = {"url_id": url_id, "url": url, "domain": url_domain(url)}
             post_url_rows.append({"post_id": post_id, "url_id": url_id})
 
         # 5.6: followers_count varies per tweet row — keep only the latest-by-date
@@ -173,13 +233,13 @@ def process_gpreda_csv(bucket: str, key: str, source_dataset: str) -> dict:
                 "platform":           PLATFORM,
                 "karma_score":        None,
                 "followers_count":    followers,
-                "friends_count":      int(r["user_friends"]) if pd.notna(r.get("user_friends")) else None,
-                "favourites_count":   int(r["user_favourites"]) if pd.notna(r.get("user_favourites")) else None,
+                "friends_count":      _to_int(r.get("user_friends")),
+                "favourites_count":   _to_int(r.get("user_favourites")),
                 "statuses_count":     None,
-                "is_verified":        bool(r["user_verified"]) if pd.notna(r.get("user_verified")) else None,
-                "account_created_at": str_datetime_to_iso(str(r["user_created"])) if pd.notna(r.get("user_created")) else None,
-                "location":           r.get("user_location") if pd.notna(r.get("user_location")) else None,
-                "description":        r.get("user_description") if pd.notna(r.get("user_description")) else None,
+                "is_verified":        _to_bool(r.get("user_verified")),
+                "account_created_at": str_datetime_to_iso(_clean(r.get("user_created"))),
+                "location":           _clean(r.get("user_location")),
+                "description":        _clean(r.get("user_description")),
                 "source_dataset":     source_dataset,
                 "_created_at":        created_at,
             }
@@ -188,68 +248,44 @@ def process_gpreda_csv(bucket: str, key: str, source_dataset: str) -> dict:
     source_rows = [{"source_id": sid, "name": name} for sid, name in sources_seen.items()]
 
     return {
-        "posts":          pd.DataFrame(posts_rows),
-        "users":          pd.DataFrame(users_rows),
-        "engagement":     pd.DataFrame(),  # gpreda CSVs have no per-tweet engagement counts
-        "snapshots":      pd.DataFrame(snapshot_rows),
-        "hashtags":       pd.DataFrame(hashtag_rows),
-        "post_hashtags":  pd.DataFrame(post_hashtag_rows),
-        "urls":           pd.DataFrame(url_rows),
-        "post_urls":      pd.DataFrame(post_url_rows),
-        "sources":        pd.DataFrame(source_rows),
+        "posts":          posts_rows,
+        "users":          users_rows,
+        "post_engagement": [],  # gpreda CSVs have no per-tweet engagement counts
+        "user_snapshots": snapshot_rows,
+        "hashtags":       list(hashtag_map.values()),
+        "post_hashtags":  post_hashtag_rows,
+        "urls":           list(url_map.values()),
+        "post_urls":      post_url_rows,
+        "sources":        source_rows,
     }
 
 
 # ── Writing ───────────────────────────────────────────────────────────────────
 
-def add_date_partitions(df, fallback_date: datetime):
-    import pandas as pd
+def write_result_tables(bucket: str, result: dict, fallback_date: datetime, source_dataset: str) -> dict:
+    """Every table is one Parquet object at a deterministic key scoped to
+    this (day, source_dataset) — see put_parquet's docstring. Unlike the old
+    upsert helpers, nothing here reads existing Silver data back."""
+    tag = run_tag(fallback_date, "x", source_dataset)
+    y, m, d = fallback_date.year, f"{fallback_date.month:02d}", f"{fallback_date.day:02d}"
 
-    created = pd.to_datetime(df["created_at"], utc=True, errors="coerce")
-    df["year"] = created.dt.year.fillna(fallback_date.year).astype(int)
-    df["month"] = created.dt.month.fillna(fallback_date.month).astype(int).map(lambda m: f"{m:02d}")
-    df["day"] = created.dt.day.fillna(fallback_date.day).astype(int).map(lambda d: f"{d:02d}")
-    return df
+    writes = {
+        "posts":           (silver_key("posts", tag, {"year": y, "month": m, "day": d}), result["posts"]),
+        "users":           (silver_key("users", tag, {"platform": PLATFORM}), result["users"]),
+        "post_engagement": (silver_key("post_engagement", tag), result["post_engagement"]),
+        "user_snapshots":  (silver_key("user_snapshots", tag), result["user_snapshots"]),
+        "hashtags":        (silver_key("hashtags", tag), result["hashtags"]),
+        "post_hashtags":   (silver_key("post_hashtags", tag), result["post_hashtags"]),
+        "urls":            (silver_key("urls", tag), result["urls"]),
+        "post_urls":       (silver_key("post_urls", tag), result["post_urls"]),
+        "sources":         (silver_key("sources", tag), result["sources"]),
+    }
 
-
-def write_result_tables(bucket: str, result: dict, fallback_date: datetime) -> dict:
     summary = {}
-
-    posts_df = result.get("posts")
-    if posts_df is not None and not posts_df.empty:
-        posts_df = add_date_partitions(posts_df, fallback_date)
-        summary["posts"] = write_partitioned(posts_df, bucket, "posts", ["year", "month", "day"])
-
-    if result.get("users") is not None and not result["users"].empty:
-        summary["users"] = upsert_users(bucket, PLATFORM, result["users"])
-
-    if result.get("engagement") is not None and not result["engagement"].empty:
-        summary["post_engagement"] = upsert_dimension_table(
-            bucket, "post_engagement", result["engagement"], ["post_id"]
-        )
-
-    if result.get("snapshots") is not None and not result["snapshots"].empty:
-        summary["user_snapshots"] = append_partitioned(result["snapshots"], bucket, "user_snapshots")
-
-    if result.get("hashtags") is not None and not result["hashtags"].empty:
-        summary["hashtags"] = upsert_dimension_table(bucket, "hashtags", result["hashtags"], ["hashtag_id"])
-
-    if result.get("post_hashtags") is not None and not result["post_hashtags"].empty:
-        summary["post_hashtags"] = upsert_dimension_table(
-            bucket, "post_hashtags", result["post_hashtags"], ["post_id", "hashtag_id"]
-        )
-
-    if result.get("urls") is not None and not result["urls"].empty:
-        summary["urls"] = upsert_dimension_table(bucket, "urls", result["urls"], ["url_id"])
-
-    if result.get("post_urls") is not None and not result["post_urls"].empty:
-        summary["post_urls"] = upsert_dimension_table(
-            bucket, "post_urls", result["post_urls"], ["post_id", "url_id"]
-        )
-
-    if result.get("sources") is not None and not result["sources"].empty:
-        summary["sources"] = upsert_dimension_table(bucket, "sources", result["sources"], ["source_id"])
-
+    for name, (key, rows) in writes.items():
+        count = put_parquet(s3, bucket, name, key, rows)
+        if count:
+            summary[name] = count
     return summary
 
 
@@ -275,7 +311,6 @@ def lambda_handler(event, context):
 
     totals: dict[str, int] = defaultdict(int)
     processed, skipped = [], []
-    users_cache = None  # loaded lazily, once, only if a congress.json day is found
 
     for day_prefix in day_prefixes:
         full_prefix = f"bronze/x/{day_prefix}"
@@ -294,18 +329,19 @@ def lambda_handler(event, context):
             fallback_date = datetime.now(timezone.utc)
 
         filenames = list_partition_files(bucket, full_prefix)
-        result = None
 
         if "covid.csv" in filenames:
-            result = process_gpreda_csv(bucket, f"{full_prefix}/covid.csv", "covid")
+            source_dataset = "covid"
+            result = process_gpreda_csv(bucket, f"{full_prefix}/covid.csv", source_dataset)
         elif "bitcoin.csv" in filenames:
-            result = process_gpreda_csv(bucket, f"{full_prefix}/bitcoin.csv", "bitcoin")
+            source_dataset = "bitcoin"
+            result = process_gpreda_csv(bucket, f"{full_prefix}/bitcoin.csv", source_dataset)
         else:
             logger.warning(f"No recognized data file in {full_prefix}: {filenames}")
             skipped.append(day_prefix)
             continue
 
-        summary = write_result_tables(bucket, result, fallback_date)
+        summary = write_result_tables(bucket, result, fallback_date, source_dataset)
         for table, count in summary.items():
             totals[table] += count
         processed.append(day_prefix)

@@ -158,7 +158,7 @@ resource "aws_iam_role_policy" "analytics_s3" {
       {
         Sid      = "WriteGold"
         Effect   = "Allow"
-        Action   = ["s3:PutObject"]
+        Action   = ["s3:PutObject", "s3:DeleteObject"]
         Resource = "${var.data_lake_bucket_arn}/gold/*"
       },
       {

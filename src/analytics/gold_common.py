@@ -12,10 +12,21 @@ import logging
 logger = logging.getLogger()
 
 
-def safe_read_parquet(path: str, dataset: bool = True, filters=None):
+def safe_read_parquet(path: str, dataset: bool = True, filters=None, dedupe_subset=None):
     """Reads a Silver/Gold Parquet path, returning an empty DataFrame instead
     of raising when the prefix doesn't exist yet (e.g. no data for that day,
-    or a table that hasn't been written by any normalization run so far)."""
+    or a table that hasn't been written by any normalization run so far).
+
+    dedupe_subset: as of the Silver-layer performance rewrite (see
+    KNOWLEDGE.md 9.11), normalization_hn/normalization_x no longer
+    read-modify-write Silver tables on every invocation — each run just
+    writes its own small Parquet file. That means the same entity (a user,
+    a hashtag, a URL, ...) can legitimately appear in more than one file if
+    it showed up on more than one day, so any table read here that's keyed
+    by a primary key should collapse those with drop_duplicates(). This is
+    the one place that cost is paid now — once per Gold run, on however much
+    data is actually being read — instead of on every single Silver write.
+    """
     import pandas as pd
     import awswrangler as wr
 
@@ -23,10 +34,22 @@ def safe_read_parquet(path: str, dataset: bool = True, filters=None):
         kwargs = {"dataset": dataset}
         if filters:
             kwargs["filters"] = filters
-        return wr.s3.read_parquet(path, **kwargs)
+        df = wr.s3.read_parquet(path, **kwargs)
     except Exception as e:
-        logger.info(f"No data at {path} ({e.__class__.__name__}), treating as empty")
+        # Logging only e.__class__.__name__ here previously hid the actual
+        # cause (a TypeError from a partition-dtype mismatch looked
+        # identical to "no files found yet") — log the real message and a
+        # traceback so a genuine bug doesn't get silently treated as
+        # "no data".
+        logger.warning(f"No data at {path} ({e.__class__.__name__}: {e}), treating as empty", exc_info=True)
         return pd.DataFrame()
+
+    if dedupe_subset and not df.empty:
+        cols = [dedupe_subset] if isinstance(dedupe_subset, str) else list(dedupe_subset)
+        cols = [c for c in cols if c in df.columns]
+        if cols:
+            df = df.drop_duplicates(subset=cols, keep="last").reset_index(drop=True)
+    return df
 
 
 def write_gold(df, bucket: str, table: str, partition_cols: list[str] | None) -> int:
@@ -55,6 +78,13 @@ def write_gold(df, bucket: str, table: str, partition_cols: list[str] | None) ->
             partition_cols=partition_cols,
         )
     else:
-        wr.s3.to_parquet(df=df, path=path, dataset=False, mode="overwrite")
+        # dataset=False requires `path` to be an exact object key, not a
+        # prefix -- but `path` here is a folder ("gold/{table}/"). This was
+        # always latently broken; it just never fired before because
+        # top_x_users_followers had no non-empty X data to write until now.
+        # dataset=True with mode="overwrite" handles a table-folder path
+        # correctly even with no partition_cols: it clears the folder and
+        # writes the new file(s) under it.
+        wr.s3.to_parquet(df=df, path=path, dataset=True, mode="overwrite")
 
     return len(df)

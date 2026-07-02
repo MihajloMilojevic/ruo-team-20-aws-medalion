@@ -32,7 +32,7 @@ resource "aws_cloudwatch_log_group" "lambdas" {
 # layers/silver_common/README.md) since this project has no build step.
 data "archive_file" "silver_common_layer" {
   type        = "zip"
-  source_dir  = "${path.root}/src/layers/silver_common/python"
+  source_dir  = "${path.root}/src/layers/silver_common"
   output_path = "${path.root}/src/layers/silver_common_layer.zip"
 }
 
@@ -114,13 +114,12 @@ resource "aws_lambda_function" "normalization_hn" {
   runtime          = "python3.12"
   handler          = "lambda_function.lambda_handler"
   timeout          = 300
-  memory_size      = 512
+  memory_size      = 1024
   role             = var.normalization_hn_role_arn
 
   # awswrangler from the AWS-hosted layer, silver_common.py + bs4 from our
   # own layer. Neither is bundled into package.zip anymore.
   layers = [
-    local.awswrangler_layer_arn,
     aws_lambda_layer_version.silver_common.arn,
   ]
 
@@ -147,13 +146,12 @@ resource "aws_lambda_function" "normalization_x" {
   runtime          = "python3.12"
   handler          = "lambda_function.lambda_handler"
   timeout          = 300
-  memory_size      = 512
+  memory_size      = 1024
   role             = var.normalization_x_role_arn
 
   # Same two layers as normalization_hn — same shared helpers, same
   # dependency set.
   layers = [
-    local.awswrangler_layer_arn,
     aws_lambda_layer_version.silver_common.arn,
   ]
 
@@ -180,7 +178,7 @@ resource "aws_lambda_function" "analytics" {
   runtime          = "python3.12"
   handler          = "lambda_function.lambda_handler"
   timeout          = 300
-  memory_size      = 512
+  memory_size      = 2048
   role             = var.analytics_role_arn
 
   # awswrangler only — analytics keeps gold_common.py bundled in its own

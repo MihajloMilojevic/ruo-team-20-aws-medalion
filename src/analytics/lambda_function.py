@@ -7,16 +7,19 @@ GOLD_LAYER_HANDOFF.md, section 3), writing each as partitioned Parquet under
 gold/. One Lambda, one pass over Silver — see the handoff doc section 1 for
 why this isn't split per-metric.
 
-Optional event parameter:
-    date (str): date in YYYY-MM-DD format to compute daily HN metrics for.
-                Defaults to yesterday if not provided (same default as
-                ingestion/normalization_hn, so a plain daily invoke picks up
-                what normalization_hn just wrote).
+Required event parameter for a full backfill workflow:
+    date (str): date in YYYY-MM-DD format to compute metrics for, for BOTH
+                platforms. Defaults to yesterday if not provided (same
+                default as ingestion/normalization_hn).
 
-X metrics (daily_users_metric's X rows) are computed across every historical
-date present in Silver, not just the target day — X data is bulk-uploaded and
-sparse, so a single "yesterday" run would leave the X charts empty (handoff
-doc 5.2).
+Every date-scoped metric — including daily_users_metric for X — computes
+strictly for this one target date now, uniformly across both platforms.
+(Previously X was special-cased to compute across every historical date in
+one run, to avoid an empty chart on a single "yesterday" invoke — removed
+by request: the intended workflow now is to invoke this Lambda once per
+date across the desired range as a one-time backfill once the project's
+data collection is complete, e.g. from 2020-07-24 onward now that Congress
+support has been removed and COVID is the earliest X source.)
 """
 
 import logging
@@ -32,6 +35,22 @@ SILVER_TABLES = [
     "users", "posts", "post_engagement", "hashtags",
     "post_hashtags", "urls", "post_urls", "user_snapshots", "sources",
 ]
+
+# Primary key per Silver table, used to collapse the "one small file per
+# Silver run" layout back into one row per entity when Gold reads a table in
+# full (see gold_common.safe_read_parquet's dedupe_subset docstring).
+# user_snapshots is intentionally excluded — it's a genuine append-only time
+# series, multiple rows per user are expected and meaningful there.
+SILVER_PRIMARY_KEYS = {
+    "users":           "user_id",
+    "posts":           "post_id",
+    "post_engagement": "post_id",
+    "hashtags":        "hashtag_id",
+    "post_hashtags":   ["post_id", "hashtag_id"],
+    "urls":            "url_id",
+    "post_urls":       ["post_id", "url_id"],
+    "sources":         "source_id",
+}
 
 
 def parse_target_date(event: dict) -> datetime:
@@ -72,79 +91,108 @@ def _first_seen_dates(users_df, posts_all, platform: str):
     Users with neither signal are excluded from the new_users timeline —
     a documented limitation rather than an attempt to backdate them.
 
-    Built from plain dicts/python date objects rather than pandas Series
+    Merged from plain dicts/python date objects rather than pandas Series
     arithmetic — combining an all-NaT datetime column with an object column
     via combine_first/concat silently upcasts to datetime64, which then
-    can't be compared against a plain datetime.date later on."""
+    can't be compared against a plain datetime.date later on (see
+    KNOWLEDGE.md 9.10).
+
+    Date PARSING deliberately avoids pandas/pyarrow's native datetime
+    machinery entirely (no pd.to_datetime, vectorized or scalar). Both a
+    per-scalar pd.to_datetime() loop and a vectorized pd.to_datetime(series)
+    call crashed the process at exactly this step in production — same
+    logical spot either way, which points at pandas' own datetime-parsing
+    C code in this Lambda environment, not at looping vs. vectorizing.
+    Our created_at/account_created_at values are never arbitrary strings
+    needing pandas' flexible format inference in the first place — every
+    writer in this project (silver_common.epoch_to_iso /
+    str_datetime_to_iso) always emits datetime.fromtimestamp(...).isoformat()
+    or an equivalent strict ISO-8601 string, or None. Python's stdlib
+    datetime.fromisoformat() parses that directly with no numpy/pyarrow
+    C-extension involvement at all.
+    """
     import pandas as pd
+    from datetime import datetime as _dt
 
     if users_df.empty or "user_id" not in users_df.columns:
         return pd.Series(dtype="object")
 
-    def to_date(value):
+    def parse_iso_date(value):
         if value is None or (isinstance(value, float) and pd.isna(value)):
             return None
         try:
-            ts = pd.to_datetime(value, utc=True, errors="coerce")
-        except (ValueError, TypeError):
+            return _dt.fromisoformat(str(value)).date()
+        except ValueError:
             return None
-        if ts is None or pd.isna(ts):
-            return None
-        return ts.date()
+
+    def parsed_dates(series: "pd.Series"):
+        # .map() still iterates per-element, but through stdlib
+        # datetime.fromisoformat rather than pandas' own datetime parser —
+        # that's the part that crashed twice, not the iteration itself.
+        return series.map(parse_iso_date)
 
     # Earliest post date per author, on this platform — the fallback signal.
+    logger.info(f"[_first_seen_dates:{platform}] filtering posts_all by platform...")
     first_post: dict[str, object] = {}
     platform_posts = (
         posts_all[posts_all["platform"] == platform]
         if not posts_all.empty and "platform" in posts_all.columns
         else posts_all.iloc[0:0]
     )
+    logger.info(f"[_first_seen_dates:{platform}] {len(platform_posts)} post(s) for this platform")
     if not platform_posts.empty:
-        for uid, created_at in zip(platform_posts["author_user_id"], platform_posts["created_at"]):
-            if not uid:
-                continue
-            d = to_date(created_at)
-            if d is None:
+        logger.info(f"[_first_seen_dates:{platform}] parsing post created_at dates...")
+        post_dates = parsed_dates(platform_posts["created_at"])
+        logger.info(f"[_first_seen_dates:{platform}] merging post-based first-seen dates...")
+        for uid, d in zip(platform_posts["author_user_id"], post_dates):
+            if not uid or d is None:
                 continue
             if uid not in first_post or d < first_post[uid]:
                 first_post[uid] = d
+    logger.info(f"[_first_seen_dates:{platform}] first_post has {len(first_post)} entries")
 
     # account_created_at, where present, takes priority over the post fallback.
     combined = dict(first_post)
-    account_col = users_df["account_created_at"] if "account_created_at" in users_df.columns else None
-    for uid, account_created_at in zip(users_df["user_id"], account_col if account_col is not None else []):
-        d = to_date(account_created_at)
-        if d is not None:
-            combined[uid] = d
+    if "account_created_at" in users_df.columns:
+        logger.info(f"[_first_seen_dates:{platform}] parsing account_created_at dates...")
+        account_dates = parsed_dates(users_df["account_created_at"])
+        logger.info(f"[_first_seen_dates:{platform}] merging account-based first-seen dates...")
+        for uid, d in zip(users_df["user_id"], account_dates):
+            if d is not None:
+                combined[uid] = d
+    logger.info(f"[_first_seen_dates:{platform}] combined has {len(combined)} entries")
 
     return pd.Series(combined, dtype="object")
 
 
+
 def metric_daily_users(users_hn, users_x, posts_all, target_date: datetime):
-    """HN emits one row for the target date only (daily cron cadence).
-    X emits one row per historical date present in its first-seen timeline,
-    so the X series in Superset isn't a single near-empty point
-    (handoff doc 5.2/5.3)."""
+    """Total/new users for target_date, for both platforms uniformly.
+    Backfilling the full X history is done by invoking this Lambda once per
+    date over the desired range, not by this function computing every date
+    in one run — see the module docstring for why that special-case was
+    removed."""
     import pandas as pd
 
     cols = ["date", "platform", "total_users", "new_users"]
     rows = []
+    d = target_date.date()
 
     for platform, users_df in (("HackerNews", users_hn), ("X", users_x)):
+        logger.info(f"[daily_users_metric] {platform}: computing first-seen dates ({len(users_df)} user row(s))...")
         first_seen = _first_seen_dates(users_df, posts_all, platform)
+        logger.info(f"[daily_users_metric] {platform}: first_seen has {len(first_seen)} entries")
         if first_seen.empty:
             continue
 
         sorted_dates = first_seen.sort_values()
-        target_dates = [target_date.date()] if platform == "HackerNews" else sorted(first_seen.unique())
-
-        for d in target_dates:
-            rows.append({
-                "date":         d.isoformat(),
-                "platform":     platform,
-                "total_users":  int((sorted_dates <= d).sum()),
-                "new_users":    int((sorted_dates == d).sum()),
-            })
+        rows.append({
+            "date":         d.isoformat(),
+            "platform":     platform,
+            "total_users":  int((sorted_dates <= d).sum()),
+            "new_users":    int((sorted_dates == d).sum()),
+        })
+        logger.info(f"[daily_users_metric] {platform}: done")
 
     return pd.DataFrame(rows, columns=cols) if rows else pd.DataFrame(columns=cols)
 
@@ -222,7 +270,13 @@ def metric_data_quality(bucket: str, target_date: datetime):
 
     rows = []
     for table in SILVER_TABLES:
-        df = safe_read_parquet(f"s3://{bucket}/silver/{table}/", dataset=True)
+        logger.info(f"[data_quality] reading {table}...")
+        df = safe_read_parquet(
+            f"s3://{bucket}/silver/{table}/",
+            dataset=True,
+            dedupe_subset=SILVER_PRIMARY_KEYS.get(table),
+        )
+        logger.info(f"[data_quality] {table}: {len(df)} row(s)")
         row_count = len(df)
         col_count = len(df.columns) if row_count else 0
 
@@ -251,48 +305,81 @@ def lambda_handler(event, context):
     y, m, d = target_date.year, f"{target_date.month:02d}", f"{target_date.day:02d}"
     logger.info(f"Computing Gold metrics for {target_date.strftime('%Y-%m-%d')}")
 
+    logger.info(f"Reading silver/posts/ (day partition: year={y}/month={m}/day={d})")
+    # Reading the exact partition path instead of filters=[("year","=",str(y)),...]
+    # deliberately: pyarrow's Hive partition discovery infers year/month/day
+    # as int32 from the folder names (year=2026 -> 2026 the int), but the old
+    # filters approach compared that against string values ("2026") -- a
+    # TypeError on every single run, silently swallowed by safe_read_parquet
+    # into "treating as empty". Reading the folder directly sidesteps
+    # partition-type inference entirely.
     posts_day = safe_read_parquet(
-        f"s3://{bucket}/silver/posts/",
-        filters=[("year", "=", str(y)), ("month", "=", m), ("day", "=", d)],
+        f"s3://{bucket}/silver/posts/year={y}/month={m}/day={d}/",
+        dedupe_subset="post_id",
     )
-    posts_all = safe_read_parquet(f"s3://{bucket}/silver/posts/")
-    users_hn = safe_read_parquet(f"s3://{bucket}/silver/users/platform=HackerNews/", dataset=False)
-    users_x = safe_read_parquet(f"s3://{bucket}/silver/users/platform=X/", dataset=False)
+    logger.info(f"posts_day: {len(posts_day)} row(s)")
 
-    summary = {
-        "daily_post_counts": write_gold(
-            metric_daily_post_counts(posts_day, target_date),
-            bucket, "daily_post_counts", ["platform", "date"],
-        ),
-        "daily_users_metric": write_gold(
-            metric_daily_users(users_hn, users_x, posts_all, target_date),
-            bucket, "daily_users_metric", ["platform", "date"],
-        ),
-        "top_x_users_followers": write_gold(
-            metric_top_x_followers(users_x),
-            bucket, "top_x_users_followers", None,
-        ),
-        "top_hn_users_karma": write_gold(
-            metric_hn_karma(users_hn, target_date, ascending=False),
-            bucket, "top_hn_users_karma", ["date"],
-        ),
-        "bottom_hn_users_karma": write_gold(
-            metric_hn_karma(users_hn, target_date, ascending=True),
-            bucket, "bottom_hn_users_karma", ["date"],
-        ),
-        "top_hn_jobs_score": write_gold(
-            metric_top_hn_by_score(posts_day, "job", target_date),
-            bucket, "top_hn_jobs_score", ["date"],
-        ),
-        "top_hn_stories_score": write_gold(
-            metric_top_hn_by_score(posts_day, "story", target_date),
-            bucket, "top_hn_stories_score", ["date"],
-        ),
-        "data_quality_score": write_gold(
-            metric_data_quality(bucket, target_date),
-            bucket, "data_quality_score", ["date"],
-        ),
-    }
+    logger.info("Reading silver/posts/ (full history)")
+    posts_all = safe_read_parquet(f"s3://{bucket}/silver/posts/", dedupe_subset="post_id")
+    logger.info(f"posts_all: {len(posts_all)} row(s)")
+    # metric_daily_users (via _first_seen_dates) only ever reads
+    # author_user_id/platform/created_at from this. The full read includes
+    # content_text/title/url for every post in the table's history, which
+    # was sitting in memory for no reason right alongside users_hn/users_x —
+    # likely what pushed a 512MB Lambda into an OOM-adjacent native crash.
+    _posts_all_cols = [c for c in ("author_user_id", "platform", "created_at") if c in posts_all.columns]
+    posts_all = posts_all[_posts_all_cols].copy() if _posts_all_cols else posts_all
+
+    logger.info("Reading silver/users/platform=HackerNews/")
+    # dataset=True, not False: normalization_hn now writes one file per run
+    # under this platform folder (see silver_common.put_parquet), so this
+    # folder will hold multiple files as soon as it's been run more than
+    # once. dataset=False requires an exact single object key and only
+    # ever worked here by coincidence while exactly one file existed.
+    users_hn = safe_read_parquet(
+        f"s3://{bucket}/silver/users/platform=HackerNews/", dedupe_subset="user_id",
+    )
+    logger.info(f"users_hn: {len(users_hn)} row(s)")
+
+    logger.info("Reading silver/users/platform=X/")
+    users_x = safe_read_parquet(
+        f"s3://{bucket}/silver/users/platform=X/", dedupe_subset="user_id",
+    )
+    logger.info(f"users_x: {len(users_x)} row(s)")
+
+    # Each metric is computed and written as its own logged step, wrapped in
+    # its own try/except. Two reasons: (1) a normal Python exception in one
+    # metric no longer takes down every other metric in the run — you get
+    # partial Gold output plus a clear traceback instead of nothing; (2) if
+    # something crashes the whole process at the native level (segfault —
+    # not catchable in Python at all), the LAST "Computing ..." line that
+    # made it to CloudWatch before the process died tells you exactly which
+    # metric to investigate, since nothing else narrows it down.
+    steps = [
+        ("daily_post_counts", lambda: metric_daily_post_counts(posts_day, target_date), ["platform", "date"]),
+        ("daily_users_metric", lambda: metric_daily_users(users_hn, users_x, posts_all, target_date), ["platform", "date"]),
+        ("top_x_users_followers", lambda: metric_top_x_followers(users_x), None),
+        ("top_hn_users_karma", lambda: metric_hn_karma(users_hn, target_date, ascending=False), ["date"]),
+        ("bottom_hn_users_karma", lambda: metric_hn_karma(users_hn, target_date, ascending=True), ["date"]),
+        ("top_hn_jobs_score", lambda: metric_top_hn_by_score(posts_day, "job", target_date), ["date"]),
+        ("top_hn_stories_score", lambda: metric_top_hn_by_score(posts_day, "story", target_date), ["date"]),
+        ("data_quality_score", lambda: metric_data_quality(bucket, target_date), ["date"]),
+    ]
+
+    summary: dict[str, int] = {}
+    errors: dict[str, str] = {}
+    for name, compute_fn, partition_cols in steps:
+        logger.info(f"Computing {name}...")
+        try:
+            df = compute_fn()
+            logger.info(f"Computed {name}: {len(df)} row(s)")
+            summary[name] = write_gold(df, bucket, name, partition_cols)
+            logger.info(f"Wrote {name}")
+        except Exception as e:
+            logger.exception(f"{name} failed: {e}")
+            errors[name] = f"{type(e).__name__}: {e}"
 
     logger.info(f"Gold write summary: {summary}")
-    return {"date": target_date.strftime("%Y-%m-%d"), "summary": summary}
+    if errors:
+        logger.warning(f"Gold metrics with errors: {errors}")
+    return {"date": target_date.strftime("%Y-%m-%d"), "summary": summary, "errors": errors}
