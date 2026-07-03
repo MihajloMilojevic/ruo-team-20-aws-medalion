@@ -44,6 +44,23 @@ resource "aws_lambda_layer_version" "silver_common" {
   compatible_runtimes = ["python3.12"]
 }
 
+# delivery_common: pg8000 (pure-Python PostgreSQL driver) for the delivery
+# Lambda — same vendored-into-the-repo pattern as silver_common, see
+# layers/delivery_common/README.md for why pg8000 over psycopg2.
+data "archive_file" "delivery_common_layer" {
+  type        = "zip"
+  source_dir  = "${path.root}/src/layers/delivery_common"
+  output_path = "${path.root}/src/layers/delivery_common_layer.zip"
+}
+
+resource "aws_lambda_layer_version" "delivery_common" {
+  layer_name          = "${var.project_name}-${var.environment}-delivery-common"
+  description         = "PostgreSQL driver (pg8000) for the delivery Lambda"
+  filename            = data.archive_file.delivery_common_layer.output_path
+  source_code_hash    = data.archive_file.delivery_common_layer.output_base64sha256
+  compatible_runtimes = ["python3.12"]
+}
+
 # ── Code packaging ────────────────────────────────────────────────────────────
 data "archive_file" "ingestion" {
   type        = "zip"
@@ -209,9 +226,19 @@ resource "aws_lambda_function" "delivery" {
   source_code_hash = data.archive_file.delivery.output_base64sha256
   runtime          = "python3.12"
   handler          = "lambda_function.lambda_handler"
-  timeout          = 120
-  memory_size      = 256
+  # 300s/512MB: a {"full_refresh": true} run reads every gold table through
+  # pandas — the old 120s/256MB sizing left no headroom for the awswrangler
+  # cold import alone.
+  timeout          = 300
+  memory_size      = 512
   role             = var.delivery_role_arn
+
+  # pandas + awswrangler for reading gold Parquet (same AWS-hosted layer
+  # analytics uses), pg8000 for PostgreSQL from our own layer.
+  layers = [
+    local.awswrangler_layer_arn,
+    aws_lambda_layer_version.delivery_common.arn,
+  ]
 
   # Must be inside the VPC to reach EC2/PostgreSQL.
   vpc_config {
@@ -222,6 +249,14 @@ resource "aws_lambda_function" "delivery" {
   environment {
     variables = {
       DATA_LAKE_BUCKET = var.data_lake_bucket_name
+      # Private IP of the visualization EC2 instance — empty string until
+      # the instance exists (enable_ec2 = false), in which case invoking
+      # this Lambda fails fast on connect rather than doing anything useful.
+      DB_HOST     = var.db_host
+      DB_PORT     = var.db_port
+      DB_NAME     = var.db_name
+      DB_USER     = var.db_username
+      DB_PASSWORD = var.db_password
     }
   }
 

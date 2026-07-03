@@ -1,0 +1,6 @@
+# PostgreSQL driver for the delivery Lambda. pg8000 is pure Python, so the
+# same install works on any OS — no compiled psycopg2 wheels to match against
+# the Lambda runtime. Installed with:
+#   pip install "pg8000>=1.31,<2" -t .
+# (run from inside this python/ directory)
+pg8000>=1.31,<2

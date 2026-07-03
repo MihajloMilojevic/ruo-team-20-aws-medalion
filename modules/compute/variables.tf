@@ -22,3 +22,34 @@ variable "aws_region" {
   type    = string
   default = "us-east-1"
 }
+
+# ── PostgreSQL connection for the delivery Lambda ────────────────────────────
+# db_host is the visualization instance's private IP, passed through the root
+# module. Empty string when enable_ec2 = false (LocalStack) — the Lambda then
+# fails fast on connect instead of hanging.
+
+variable "db_host" {
+  type    = string
+  default = ""
+}
+
+variable "db_port" {
+  type    = string
+  default = "5432"
+}
+
+variable "db_name" {
+  type    = string
+  default = ""
+}
+
+variable "db_username" {
+  type    = string
+  default = ""
+}
+
+variable "db_password" {
+  type      = string
+  default   = ""
+  sensitive = true
+}

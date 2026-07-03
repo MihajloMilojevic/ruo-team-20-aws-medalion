@@ -2,3 +2,20 @@ aws_region          = "eu-central-1"
 project_name        = "social-media-pipeline"
 environment         = "dev"
 discord_webhook_url = "https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN"
+
+# ── Visualization (EC2 + PostgreSQL + Superset) ──────────────────────────────
+# Set enable_ec2 = false for LocalStack runs (Community edition has no EC2).
+enable_ec2 = true
+
+# Optional — contents of your public key (e.g. ~/.ssh/id_ed25519.pub) if you
+# want SSH access to the instance for debugging. Leave "" to skip.
+ssh_public_key = ""
+
+db_username = "pipeline"
+db_password = "CHANGE_ME_STRONG_PASSWORD"
+db_name     = "analytics"
+
+superset_admin_username = "admin"
+superset_admin_password = "CHANGE_ME_ADMIN_PASSWORD"
+# Generate with: openssl rand -base64 42
+superset_secret_key     = "CHANGE_ME_RANDOM_SECRET"

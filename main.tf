@@ -63,6 +63,28 @@ module "security" {
   data_lake_bucket_arn = module.storage.data_lake_bucket_arn
 }
 
+# EC2 instance hosting PostgreSQL + Apache Superset (Docker). Gated behind
+# enable_ec2 because LocalStack Community cannot emulate EC2 at all — local
+# runs keep this at false, real AWS deployments at true (the default).
+module "visualization" {
+  count  = var.enable_ec2 ? 1 : 0
+  source = "./modules/visualization"
+
+  project_name      = var.project_name
+  environment       = var.environment
+  subnet_id         = module.networking.public_subnet_ids[0]
+  security_group_id = module.networking.ec2_sg_id
+  ssh_public_key    = var.ssh_public_key
+
+  db_username = var.db_username
+  db_password = var.db_password
+  db_name     = var.db_name
+
+  superset_admin_username = var.superset_admin_username
+  superset_admin_password = var.superset_admin_password
+  superset_secret_key     = var.superset_secret_key
+}
+
 module "compute" {
   source = "./modules/compute"
 
@@ -79,4 +101,12 @@ module "compute" {
   vpc_security_group_ids = [module.networking.lambda_vpc_sg_id]
   discord_webhook_url    = var.discord_webhook_url
   aws_region             = var.aws_region
+
+  # PostgreSQL connection for the delivery Lambda — resolved from the
+  # visualization instance when it exists, empty otherwise (LocalStack).
+  db_host     = try(module.visualization[0].private_ip, "")
+  db_port     = "5432"
+  db_name     = var.db_name
+  db_username = var.db_username
+  db_password = var.db_password
 }

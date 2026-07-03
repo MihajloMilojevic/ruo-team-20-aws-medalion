@@ -1,0 +1,4 @@
+# Nothing is pip-installed into this folder. All dependencies come from
+# Lambda Layers (see modules/compute/main.tf):
+#   - pandas + awswrangler: AWS-hosted AWSSDKPandas-Python312 layer
+#   - pg8000: our own delivery_common layer (src/layers/delivery_common/)
