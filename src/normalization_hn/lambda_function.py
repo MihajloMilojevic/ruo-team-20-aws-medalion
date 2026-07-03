@@ -249,4 +249,8 @@ def lambda_handler(event, context):
             summary[name] = future.result()
 
     logger.info(f"Silver write summary: {summary}")
-    return {"prefix": prefix, "summary": summary}
+    return {
+        "date": event.get("date", None),
+        "prefix": prefix, 
+        "summary": summary
+        }

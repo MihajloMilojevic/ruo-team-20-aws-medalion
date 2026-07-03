@@ -348,6 +348,7 @@ def lambda_handler(event, context):
         logger.info(f"[{day_prefix}] {summary}")
 
     return {
+        "date": event.get("date", None),
         "processed_partitions": processed,
         "skipped_partitions":   skipped,
         "totals":               dict(totals),

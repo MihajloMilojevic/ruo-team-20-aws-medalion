@@ -1,0 +1,259 @@
+{
+  "Comment": "Daily pipeline: ingestion -> (normalization_hn || normalization_x) -> analytics -> delivery. The date resolved by ingestion (event date or yesterday) is threaded through every downstream step, so all steps always operate on the same day even across a midnight boundary. Failures anywhere route to NotifyFailure with the failing Lambda's full error detail.",
+  "StartAt": "Ingestion",
+  "TimeoutSeconds": 1800,
+  "States": {
+    "Ingestion": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${ingestion_lambda_arn}",
+        "Payload.$": "$"
+      },
+      "ResultSelector": {
+        "date.$": "$.Payload.date"
+      },
+      "ResultPath": "$.ingestion",
+      "TimeoutSeconds": 360,
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "IngestionFailed"
+        }
+      ],
+      "Next": "Normalization"
+    },
+
+    "Normalization": {
+      "Type": "Parallel",
+      "ResultPath": "$.normalization",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "NormalizationFailed"
+        }
+      ],
+      "Branches": [
+        {
+          "StartAt": "NormalizationHN",
+          "States": {
+            "NormalizationHN": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "Parameters": {
+                "FunctionName": "${normalization_hn_lambda_arn}",
+                "Payload": {
+                  "date.$": "$.ingestion.date"
+                }
+              },
+              "ResultSelector": {
+                "result.$": "$.Payload"
+              },
+              "TimeoutSeconds": 360,
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException",
+                    "Lambda.TooManyRequestsException"
+                  ],
+                  "IntervalSeconds": 5,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2.0
+                }
+              ],
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "NormalizationX",
+          "States": {
+            "NormalizationX": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "Parameters": {
+                "FunctionName": "${normalization_x_lambda_arn}",
+                "Payload": {
+                  "date.$": "$.ingestion.date"
+                }
+              },
+              "ResultSelector": {
+                "result.$": "$.Payload"
+              },
+              "TimeoutSeconds": 360,
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException",
+                    "Lambda.TooManyRequestsException"
+                  ],
+                  "IntervalSeconds": 5,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2.0
+                }
+              ],
+              "End": true
+            }
+          }
+        }
+      ],
+      "Next": "Analytics"
+    },
+
+    "Analytics": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${analytics_lambda_arn}",
+        "Payload": {
+          "date.$": "$.ingestion.date"
+        }
+      },
+      "ResultSelector": {
+        "result.$": "$.Payload"
+      },
+      "ResultPath": "$.analytics",
+      "TimeoutSeconds": 360,
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "AnalyticsFailed"
+        }
+      ],
+      "Next": "Delivery"
+    },
+
+    "Delivery": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${delivery_lambda_arn}",
+        "Payload": {
+          "date.$": "$.ingestion.date"
+        }
+      },
+      "ResultSelector": {
+        "result.$": "$.Payload"
+      },
+      "ResultPath": "$.delivery",
+      "TimeoutSeconds": 360,
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "DeliveryFailed"
+        }
+      ],
+      "End": true
+    },
+
+    "IngestionFailed": {
+      "Type": "Pass",
+      "Result": "Ingestion",
+      "ResultPath": "$.failed_step",
+      "Next": "NotifyFailure"
+    },
+    "NormalizationFailed": {
+      "Type": "Pass",
+      "Result": "Normalization (HN or X)",
+      "ResultPath": "$.failed_step",
+      "Next": "NotifyFailure"
+    },
+    "AnalyticsFailed": {
+      "Type": "Pass",
+      "Result": "Analytics",
+      "ResultPath": "$.failed_step",
+      "Next": "NotifyFailure"
+    },
+    "DeliveryFailed": {
+      "Type": "Pass",
+      "Result": "Delivery",
+      "ResultPath": "$.failed_step",
+      "Next": "NotifyFailure"
+    },
+
+    "NotifyFailure": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${notification_lambda_arn}",
+        "Payload": {
+          "failed_step.$": "$.failed_step",
+          "error.$": "$.error.Error",
+          "cause.$": "$.error.Cause",
+          "execution.$": "$$.Execution.Name",
+          "state_machine.$": "$$.StateMachine.Name"
+        }
+      },
+      "TimeoutSeconds": 60,
+      "Retry": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 2,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.notify_error",
+          "Next": "PipelineFailed"
+        }
+      ],
+      "Next": "PipelineFailed"
+    },
+
+    "PipelineFailed": {
+      "Type": "Fail",
+      "Error": "PipelineFailed",
+      "Cause": "A pipeline step failed - see the execution history and the Discord notification for details"
+    }
+  }
+}

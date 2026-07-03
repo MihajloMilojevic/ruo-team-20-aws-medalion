@@ -1,0 +1,4124 @@
+{
+  "version": 4,
+  "terraform_version": "1.15.6",
+  "serial": 176,
+  "lineage": "bcb03c69-9322-cb33-a545-422452848e7f",
+  "outputs": {
+    "analytics_lambda_name": {
+      "value": "social-media-pipeline-dev-analytics",
+      "type": "string"
+    },
+    "data_lake_bucket_name": {
+      "value": "social-media-pipeline-dev-datalake-1993e918",
+      "type": "string"
+    },
+    "delivery_lambda_name": {
+      "value": "social-media-pipeline-dev-delivery",
+      "type": "string"
+    },
+    "ec2_private_ip": {
+      "value": "10.0.0.194",
+      "type": "string"
+    },
+    "ec2_public_ip": {
+      "value": "3.220.174.112",
+      "type": "string"
+    },
+    "ingestion_lambda_name": {
+      "value": "social-media-pipeline-dev-ingestion",
+      "type": "string"
+    },
+    "normalization_hn_lambda_name": {
+      "value": "social-media-pipeline-dev-normalization-hn",
+      "type": "string"
+    },
+    "normalization_x_lambda_name": {
+      "value": "social-media-pipeline-dev-normalization-x",
+      "type": "string"
+    },
+    "pipeline_state_machine_arn": {
+      "value": "arn:aws:states:us-east-1:989211373225:stateMachine:social-media-pipeline-dev-pipeline",
+      "type": "string"
+    },
+    "superset_url": {
+      "value": "http://3.220.174.112:8088",
+      "type": "string"
+    },
+    "vpc_id": {
+      "value": "vpc-065aaaed5c78d7ca7",
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "module": "module.compute",
+      "mode": "data",
+      "type": "archive_file",
+      "name": "analytics",
+      "provider": "provider[\"registry.terraform.io/hashicorp/archive\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "exclude_symlink_directories": null,
+            "excludes": null,
+            "id": "cbb6368b0743351b9c3761a2e95036e8098e5716",
+            "output_base64sha256": "ABF5F106LpNu3ccezG4PTa8ytKLdUPPvwSKTzARYwsg=",
+            "output_base64sha512": "v+WQjkAU/CanEnUdlg0H0kbuHsapq2fgcZwcps5rj3M7mA+n9Ki30xXSPBUUqHW6JezpzVRWLfanmON9b2yexw==",
+            "output_file_mode": null,
+            "output_md5": "794f49b4aafceca2107dfa64bd4d08cc",
+            "output_path": "./src/analytics/package.zip",
+            "output_sha": "cbb6368b0743351b9c3761a2e95036e8098e5716",
+            "output_sha256": "001179175d3a2e936eddc71ecc6e0f4daf32b4a2dd50f3efc12293cc0458c2c8",
+            "output_sha512": "bfe5908e4014fc26a712751d960d07d246ee1ec6a9ab67e0719c1ca6ce6b8f733b980fa7f4a8b7d315d23c1514a875ba25ece9cd54562df6a798e37d6f6c9ec7",
+            "output_size": 11917,
+            "source": [],
+            "source_content": null,
+            "source_content_filename": null,
+            "source_dir": "./src/analytics",
+            "source_file": null,
+            "type": "zip"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "data",
+      "type": "archive_file",
+      "name": "delivery",
+      "provider": "provider[\"registry.terraform.io/hashicorp/archive\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "exclude_symlink_directories": null,
+            "excludes": null,
+            "id": "777b78597d490ef812e2e920aa08d3765f55145e",
+            "output_base64sha256": "DdbEtSTUkuGtEfSsdMJMMsIGPEN/MZq4/2rlCmX35ZY=",
+            "output_base64sha512": "i3EP78HxbpM7SJDonrpapuS89t5cRSfNQfG8dPZl5sqYwhhjvIOQ+DLsUMSKBGk4y2U9vg5X+wwq0PM4/AMU+A==",
+            "output_file_mode": null,
+            "output_md5": "e518c858367fea3059488bf818ce1dff",
+            "output_path": "./src/delivery/package.zip",
+            "output_sha": "777b78597d490ef812e2e920aa08d3765f55145e",
+            "output_sha256": "0dd6c4b524d492e1ad11f4ac74c24c32c2063c437f319ab8ff6ae50a65f7e596",
+            "output_sha512": "8b710fefc1f16e933b4890e89eba5aa6e4bcf6de5c4527cd41f1bc74f665e6ca98c21863bc8390f832ec50c48a046938cb653dbe0e57fb0c2ad0f338fc0314f8",
+            "output_size": 4492,
+            "source": [],
+            "source_content": null,
+            "source_content_filename": null,
+            "source_dir": "./src/delivery",
+            "source_file": null,
+            "type": "zip"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "data",
+      "type": "archive_file",
+      "name": "delivery_common_layer",
+      "provider": "provider[\"registry.terraform.io/hashicorp/archive\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "exclude_symlink_directories": null,
+            "excludes": null,
+            "id": "3738a0d0859a11fc03f7d8dd65e82446470499f3",
+            "output_base64sha256": "kzav55NQNadH7/6tdqGZR/JHPuVksbPFrj7zTT5MhFs=",
+            "output_base64sha512": "wfObAvEx13lhzhnPU7w86VeUZYw9vK+AQkfl2VArOi8KwztJAGE15zaiI58wdow+yJBySXdBdiX+ScZHC4fKfQ==",
+            "output_file_mode": null,
+            "output_md5": "e95f6fdbc2c9e130fd663fb52527cf6c",
+            "output_path": "./src/layers/delivery_common_layer.zip",
+            "output_sha": "3738a0d0859a11fc03f7d8dd65e82446470499f3",
+            "output_sha256": "9336afe7935035a747effead76a19947f2473ee564b1b3c5ae3ef34d3e4c845b",
+            "output_sha512": "c1f39b02f131d77961ce19cf53bc3ce95794658c3dbcaf804247e5d9502b3a2f0ac33b49006135e736a2239f30768c3ec890724977417625fe49c6470b87ca7d",
+            "output_size": 427509,
+            "source": [],
+            "source_content": null,
+            "source_content_filename": null,
+            "source_dir": "./src/layers/delivery_common",
+            "source_file": null,
+            "type": "zip"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "data",
+      "type": "archive_file",
+      "name": "ingestion",
+      "provider": "provider[\"registry.terraform.io/hashicorp/archive\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "exclude_symlink_directories": null,
+            "excludes": null,
+            "id": "baff1b7ac0bc8dbaf132aedb32e2d2eaecc88908",
+            "output_base64sha256": "TyeZyrSsdagLDy0ia7P5h2WdWlTPwJXxUNusw4LojCM=",
+            "output_base64sha512": "BQjs15aOh9NZBv9KaKoJ+oPmCH/Jxmb+SEWk1Z92cBUQaOFPXoW5aJ/EVj9CFZ25qfYcWEJfFqY5sVYrEU5dTg==",
+            "output_file_mode": null,
+            "output_md5": "fce08bf72869f29433730d12624e2d4f",
+            "output_path": "./src/ingestion/package.zip",
+            "output_sha": "baff1b7ac0bc8dbaf132aedb32e2d2eaecc88908",
+            "output_sha256": "4f2799cab4ac75a80b0f2d226bb3f987659d5a54cfc095f150dbacc382e88c23",
+            "output_sha512": "0508ecd7968e87d35906ff4a68aa09fa83e6087fc9c666fe4845a4d59f7670151068e14f5e85b9689fc4563f42159db9a9f61c58425f16a639b1562b114e5d4e",
+            "output_size": 3398,
+            "source": [],
+            "source_content": null,
+            "source_content_filename": null,
+            "source_dir": "./src/ingestion",
+            "source_file": null,
+            "type": "zip"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "data",
+      "type": "archive_file",
+      "name": "normalization_hn",
+      "provider": "provider[\"registry.terraform.io/hashicorp/archive\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "exclude_symlink_directories": null,
+            "excludes": null,
+            "id": "7e20ef70a738913e62cc84bf142aa23403e49eae",
+            "output_base64sha256": "jgL62GcNDzPGh+WIaTcFNWF2Dp4QDPzO/qB1f3jQVE0=",
+            "output_base64sha512": "UrxkwbYLyx/Yag9jqj3v+iIDV/7DEaL1xpBbaSHc3D9k1aKOTs/kKe6BKkEe4ICAQR2p3AHLWlOsfMsBDHNiTA==",
+            "output_file_mode": null,
+            "output_md5": "08c5c050351ff3e552b1e828de420d97",
+            "output_path": "./src/normalization_hn/package.zip",
+            "output_sha": "7e20ef70a738913e62cc84bf142aa23403e49eae",
+            "output_sha256": "8e02fad8670d0f33c687e5886937053561760e9e100cfccefea0757f78d0544d",
+            "output_sha512": "52bc64c1b60bcb1fd86a0f63aa3deffa220357fec311a2f5c6905b6921dcdc3f64d5a28e4ecfe429ee812a411ee08080411da9dc01cb5a53ac7ccb010c73624c",
+            "output_size": 4204,
+            "source": [],
+            "source_content": null,
+            "source_content_filename": null,
+            "source_dir": "./src/normalization_hn",
+            "source_file": null,
+            "type": "zip"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "data",
+      "type": "archive_file",
+      "name": "normalization_x",
+      "provider": "provider[\"registry.terraform.io/hashicorp/archive\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "exclude_symlink_directories": null,
+            "excludes": null,
+            "id": "22afcd38b655c134bf27c767fae13f8f05502add",
+            "output_base64sha256": "l5ZyBKZrJfdZxhyf/NlQnCKgFAEea5QYOum34kFZwQs=",
+            "output_base64sha512": "MSRi+iCImFxrelYliDvU5oj1xB35eqYCBVfVG6q/bVbc8Ga6RtWytt67vNgUfQf6WqTPjBVjAOZ0e4CEJum70w==",
+            "output_file_mode": null,
+            "output_md5": "cd38998a3b331038e133427a4c3d2ef4",
+            "output_path": "./src/normalization_x/package.zip",
+            "output_sha": "22afcd38b655c134bf27c767fae13f8f05502add",
+            "output_sha256": "97967204a66b25f759c61c9ffcd9509c22a014011e6b94183ae9b7e24159c10b",
+            "output_sha512": "312462fa2088985c6b7a5625883bd4e688f5c41df97aa6020557d51baabf6d56dcf066ba46d5b2b6debbbcd8147d07fa5aa4cf8c156300e6747b808426e9bbd3",
+            "output_size": 8998,
+            "source": [],
+            "source_content": null,
+            "source_content_filename": null,
+            "source_dir": "./src/normalization_x",
+            "source_file": null,
+            "type": "zip"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "data",
+      "type": "archive_file",
+      "name": "notification",
+      "provider": "provider[\"registry.terraform.io/hashicorp/archive\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "exclude_symlink_directories": null,
+            "excludes": null,
+            "id": "1b79b827373f742104a64c1479a6999f639ea811",
+            "output_base64sha256": "6lJgwOG7JhuwARyZZ5wGD2FqwJnNFexYaMVD0zMqoKA=",
+            "output_base64sha512": "PmMeySVMo+aA0At3Es6sB/bt2RHlFx4+FPqarRVVv9mEyo6jvWK9f+J5wLpxsrhgY8GDvuRjnNOACHySbyeI0A==",
+            "output_file_mode": null,
+            "output_md5": "3b1ca7f628e7f0acbc4b185bdd014e8a",
+            "output_path": "./src/notification/package.zip",
+            "output_sha": "1b79b827373f742104a64c1479a6999f639ea811",
+            "output_sha256": "ea5260c0e1bb261bb0011c99679c060f616ac099cd15ec5868c543d3332aa0a0",
+            "output_sha512": "3e631ec9254ca3e680d00b7712ceac07f6edd911e5171e3e14fa9aad1555bfd984ca8ea3bd62bd7fe279c0ba71b2b86063c183bee4639cd380087c926f2788d0",
+            "output_size": 2713,
+            "source": [],
+            "source_content": null,
+            "source_content_filename": null,
+            "source_dir": "./src/notification",
+            "source_file": null,
+            "type": "zip"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "data",
+      "type": "archive_file",
+      "name": "silver_common_layer",
+      "provider": "provider[\"registry.terraform.io/hashicorp/archive\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "exclude_symlink_directories": null,
+            "excludes": null,
+            "id": "71d58b9214dc7e3c0c2a93fd8f060e929ce4fa58",
+            "output_base64sha256": "YOSF+GQ2R9HuI8DDkuTWZVasObrabTfm4yH0DPZ3k2Q=",
+            "output_base64sha512": "LLcJ+x4DX4LNs9IK22vkhHHY0ngAdyhHguaUPl6vX44Fo6kn0Fsd5eazJDpikkTin/Zcahes80g2TgigHY1l1Q==",
+            "output_file_mode": null,
+            "output_md5": "9baccf65f5655c3905bdadc4453216d5",
+            "output_path": "./src/layers/silver_common_layer.zip",
+            "output_sha": "71d58b9214dc7e3c0c2a93fd8f060e929ce4fa58",
+            "output_sha256": "60e485f8643647d1ee23c0c392e4d66556ac39bada6d37e6e321f40cf6779364",
+            "output_sha512": "2cb709fb1e035f82cdb3d20adb6be48471d8d2780077284782e6943e5eaf5f8e05a3a927d05b1de5e6b3243a629244e29ff65c6a17acf348364e08a01d8d65d5",
+            "output_size": 42630333,
+            "source": [],
+            "source_content": null,
+            "source_content_filename": null,
+            "source_dir": "./src/layers/silver_common",
+            "source_file": null,
+            "type": "zip"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "managed",
+      "type": "aws_cloudwatch_log_group",
+      "name": "lambdas",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "analytics",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:logs:us-east-1:989211373225:log-group:/aws/lambda/social-media-pipeline-dev-analytics",
+            "id": "/aws/lambda/social-media-pipeline-dev-analytics",
+            "kms_key_id": "",
+            "log_group_class": "STANDARD",
+            "name": "/aws/lambda/social-media-pipeline-dev-analytics",
+            "name_prefix": "",
+            "retention_in_days": 7,
+            "skip_destroy": false,
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "delivery",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:logs:us-east-1:989211373225:log-group:/aws/lambda/social-media-pipeline-dev-delivery",
+            "id": "/aws/lambda/social-media-pipeline-dev-delivery",
+            "kms_key_id": "",
+            "log_group_class": "STANDARD",
+            "name": "/aws/lambda/social-media-pipeline-dev-delivery",
+            "name_prefix": "",
+            "retention_in_days": 7,
+            "skip_destroy": false,
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "ingestion",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:logs:us-east-1:989211373225:log-group:/aws/lambda/social-media-pipeline-dev-ingestion",
+            "id": "/aws/lambda/social-media-pipeline-dev-ingestion",
+            "kms_key_id": "",
+            "log_group_class": "STANDARD",
+            "name": "/aws/lambda/social-media-pipeline-dev-ingestion",
+            "name_prefix": "",
+            "retention_in_days": 7,
+            "skip_destroy": false,
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "normalization_hn",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:logs:us-east-1:989211373225:log-group:/aws/lambda/social-media-pipeline-dev-normalization_hn",
+            "id": "/aws/lambda/social-media-pipeline-dev-normalization_hn",
+            "kms_key_id": "",
+            "log_group_class": "STANDARD",
+            "name": "/aws/lambda/social-media-pipeline-dev-normalization_hn",
+            "name_prefix": "",
+            "retention_in_days": 7,
+            "skip_destroy": false,
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "normalization_x",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:logs:us-east-1:989211373225:log-group:/aws/lambda/social-media-pipeline-dev-normalization_x",
+            "id": "/aws/lambda/social-media-pipeline-dev-normalization_x",
+            "kms_key_id": "",
+            "log_group_class": "STANDARD",
+            "name": "/aws/lambda/social-media-pipeline-dev-normalization_x",
+            "name_prefix": "",
+            "retention_in_days": 7,
+            "skip_destroy": false,
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "notification",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:logs:us-east-1:989211373225:log-group:/aws/lambda/social-media-pipeline-dev-notification",
+            "id": "/aws/lambda/social-media-pipeline-dev-notification",
+            "kms_key_id": "",
+            "log_group_class": "STANDARD",
+            "name": "/aws/lambda/social-media-pipeline-dev-notification",
+            "name_prefix": "",
+            "retention_in_days": 7,
+            "skip_destroy": false,
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "managed",
+      "type": "aws_lambda_function",
+      "name": "analytics",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architectures": [
+              "x86_64"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-analytics",
+            "code_sha256": "ABF5F106LpNu3ccezG4PTa8ytKLdUPPvwSKTzARYwsg=",
+            "code_signing_config_arn": "",
+            "dead_letter_config": [],
+            "description": "Gold: computes metrics and KPIs from the silver layer",
+            "environment": [
+              {
+                "variables": {
+                  "DATA_LAKE_BUCKET": "social-media-pipeline-dev-datalake-1993e918"
+                }
+              }
+            ],
+            "ephemeral_storage": [
+              {
+                "size": 512
+              }
+            ],
+            "file_system_config": [],
+            "filename": "./src/analytics/package.zip",
+            "function_name": "social-media-pipeline-dev-analytics",
+            "handler": "lambda_function.lambda_handler",
+            "id": "social-media-pipeline-dev-analytics",
+            "image_config": [],
+            "image_uri": "",
+            "invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-analytics/invocations",
+            "kms_key_arn": "",
+            "last_modified": "2026-07-02T20:55:28.000+0000",
+            "layers": [
+              "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python312:29"
+            ],
+            "logging_config": [
+              {
+                "application_log_level": "",
+                "log_format": "Text",
+                "log_group": "/aws/lambda/social-media-pipeline-dev-analytics",
+                "system_log_level": ""
+              }
+            ],
+            "memory_size": 2048,
+            "package_type": "Zip",
+            "publish": false,
+            "qualified_arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-analytics:$LATEST",
+            "qualified_invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-analytics:$LATEST/invocations",
+            "replace_security_groups_on_destroy": null,
+            "replacement_security_group_ids": null,
+            "reserved_concurrent_executions": -1,
+            "role": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-analytics-role",
+            "runtime": "python3.12",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "snap_start": [],
+            "source_code_hash": "ABF5F106LpNu3ccezG4PTa8ytKLdUPPvwSKTzARYwsg=",
+            "source_code_size": 11917,
+            "tags": {
+              "Layer": "Gold"
+            },
+            "tags_all": {
+              "Layer": "Gold"
+            },
+            "timeout": 300,
+            "timeouts": null,
+            "tracing_config": [
+              {
+                "mode": "PassThrough"
+              }
+            ],
+            "version": "$LATEST",
+            "vpc_config": [
+              {
+                "ipv6_allowed_for_dual_stack": false,
+                "security_group_ids": [
+                  "sg-0887893cc66ef4f48"
+                ],
+                "subnet_ids": [
+                  "subnet-00b4314b43b58ea16",
+                  "subnet-0e25c287728eb13ea"
+                ],
+                "vpc_id": "vpc-065aaaed5c78d7ca7"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.data.archive_file.analytics",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.security.aws_iam_role.analytics",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "managed",
+      "type": "aws_lambda_function",
+      "name": "delivery",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architectures": [
+              "x86_64"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-delivery",
+            "code_sha256": "DdbEtSTUkuGtEfSsdMJMMsIGPEN/MZq4/2rlCmX35ZY=",
+            "code_signing_config_arn": "",
+            "dead_letter_config": [],
+            "description": "Delivery: moves gold metrics from S3 into PostgreSQL on EC2",
+            "environment": [
+              {
+                "variables": {
+                  "DATA_LAKE_BUCKET": "social-media-pipeline-dev-datalake-1993e918",
+                  "DB_HOST": "10.0.0.194",
+                  "DB_NAME": "analytics",
+                  "DB_PASSWORD": "db-admin-password",
+                  "DB_PORT": "5432",
+                  "DB_USER": "pipeline"
+                }
+              }
+            ],
+            "ephemeral_storage": [
+              {
+                "size": 512
+              }
+            ],
+            "file_system_config": [],
+            "filename": "./src/delivery/package.zip",
+            "function_name": "social-media-pipeline-dev-delivery",
+            "handler": "lambda_function.lambda_handler",
+            "id": "social-media-pipeline-dev-delivery",
+            "image_config": [],
+            "image_uri": "",
+            "invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-delivery/invocations",
+            "kms_key_arn": "",
+            "last_modified": "2026-07-02T23:54:38.000+0000",
+            "layers": [
+              "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python312:29",
+              "arn:aws:lambda:us-east-1:989211373225:layer:social-media-pipeline-dev-delivery-common:1"
+            ],
+            "logging_config": [
+              {
+                "application_log_level": "",
+                "log_format": "Text",
+                "log_group": "/aws/lambda/social-media-pipeline-dev-delivery",
+                "system_log_level": ""
+              }
+            ],
+            "memory_size": 512,
+            "package_type": "Zip",
+            "publish": false,
+            "qualified_arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-delivery:$LATEST",
+            "qualified_invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-delivery:$LATEST/invocations",
+            "replace_security_groups_on_destroy": null,
+            "replacement_security_group_ids": null,
+            "reserved_concurrent_executions": -1,
+            "role": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-delivery-role",
+            "runtime": "python3.12",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "snap_start": [],
+            "source_code_hash": "DdbEtSTUkuGtEfSsdMJMMsIGPEN/MZq4/2rlCmX35ZY=",
+            "source_code_size": 4492,
+            "tags": {
+              "Layer": "Delivery"
+            },
+            "tags_all": {
+              "Layer": "Delivery"
+            },
+            "timeout": 300,
+            "timeouts": null,
+            "tracing_config": [
+              {
+                "mode": "PassThrough"
+              }
+            ],
+            "version": "$LATEST",
+            "vpc_config": [
+              {
+                "ipv6_allowed_for_dual_stack": false,
+                "security_group_ids": [
+                  "sg-0887893cc66ef4f48"
+                ],
+                "subnet_ids": [
+                  "subnet-00b4314b43b58ea16",
+                  "subnet-0e25c287728eb13ea"
+                ],
+                "vpc_id": "vpc-065aaaed5c78d7ca7"
+              }
+            ]
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "environment"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "variables"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": "DB_PASSWORD",
+                  "type": "string"
+                }
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_layer_version.delivery_common",
+            "module.compute.data.archive_file.delivery",
+            "module.compute.data.archive_file.delivery_common_layer",
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.security.aws_iam_role.delivery",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix",
+            "module.visualization.aws_instance.visualization",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "managed",
+      "type": "aws_lambda_function",
+      "name": "ingestion",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architectures": [
+              "x86_64"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-ingestion",
+            "code_sha256": "TyeZyrSsdagLDy0ia7P5h2WdWlTPwJXxUNusw4LojCM=",
+            "code_signing_config_arn": "",
+            "dead_letter_config": [],
+            "description": "Bronze: fetches HN data and writes raw JSON to S3",
+            "environment": [
+              {
+                "variables": {
+                  "DATA_LAKE_BUCKET": "social-media-pipeline-dev-datalake-1993e918"
+                }
+              }
+            ],
+            "ephemeral_storage": [
+              {
+                "size": 512
+              }
+            ],
+            "file_system_config": [],
+            "filename": "./src/ingestion/package.zip",
+            "function_name": "social-media-pipeline-dev-ingestion",
+            "handler": "lambda_function.lambda_handler",
+            "id": "social-media-pipeline-dev-ingestion",
+            "image_config": [],
+            "image_uri": "",
+            "invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-ingestion/invocations",
+            "kms_key_arn": "",
+            "last_modified": "2026-07-01T19:37:54.232+0000",
+            "layers": [],
+            "logging_config": [
+              {
+                "application_log_level": "",
+                "log_format": "Text",
+                "log_group": "/aws/lambda/social-media-pipeline-dev-ingestion",
+                "system_log_level": ""
+              }
+            ],
+            "memory_size": 256,
+            "package_type": "Zip",
+            "publish": false,
+            "qualified_arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-ingestion:$LATEST",
+            "qualified_invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-ingestion:$LATEST/invocations",
+            "replace_security_groups_on_destroy": null,
+            "replacement_security_group_ids": null,
+            "reserved_concurrent_executions": -1,
+            "role": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-ingestion-role",
+            "runtime": "python3.12",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "snap_start": [],
+            "source_code_hash": "TyeZyrSsdagLDy0ia7P5h2WdWlTPwJXxUNusw4LojCM=",
+            "source_code_size": 3398,
+            "tags": {
+              "Layer": "Bronze"
+            },
+            "tags_all": {
+              "Layer": "Bronze"
+            },
+            "timeout": 300,
+            "timeouts": null,
+            "tracing_config": [
+              {
+                "mode": "PassThrough"
+              }
+            ],
+            "version": "$LATEST",
+            "vpc_config": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.data.archive_file.ingestion",
+            "module.security.aws_iam_role.ingestion",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "managed",
+      "type": "aws_lambda_function",
+      "name": "normalization_hn",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architectures": [
+              "x86_64"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-hn",
+            "code_sha256": "jgL62GcNDzPGh+WIaTcFNWF2Dp4QDPzO/qB1f3jQVE0=",
+            "code_signing_config_arn": "",
+            "dead_letter_config": [],
+            "description": "Silver: normalizes Hacker News bronze data and writes Parquet to S3",
+            "environment": [
+              {
+                "variables": {
+                  "DATA_LAKE_BUCKET": "social-media-pipeline-dev-datalake-1993e918"
+                }
+              }
+            ],
+            "ephemeral_storage": [
+              {
+                "size": 512
+              }
+            ],
+            "file_system_config": [],
+            "filename": "./src/normalization_hn/package.zip",
+            "function_name": "social-media-pipeline-dev-normalization-hn",
+            "handler": "lambda_function.lambda_handler",
+            "id": "social-media-pipeline-dev-normalization-hn",
+            "image_config": [],
+            "image_uri": "",
+            "invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-hn/invocations",
+            "kms_key_arn": "",
+            "last_modified": "2026-07-03T00:35:06.000+0000",
+            "layers": [
+              "arn:aws:lambda:us-east-1:989211373225:layer:social-media-pipeline-dev-silver-common:4"
+            ],
+            "logging_config": [
+              {
+                "application_log_level": "",
+                "log_format": "Text",
+                "log_group": "/aws/lambda/social-media-pipeline-dev-normalization-hn",
+                "system_log_level": ""
+              }
+            ],
+            "memory_size": 1024,
+            "package_type": "Zip",
+            "publish": false,
+            "qualified_arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-hn:$LATEST",
+            "qualified_invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-hn:$LATEST/invocations",
+            "replace_security_groups_on_destroy": null,
+            "replacement_security_group_ids": null,
+            "reserved_concurrent_executions": -1,
+            "role": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-normalization-hn-role",
+            "runtime": "python3.12",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "snap_start": [],
+            "source_code_hash": "jgL62GcNDzPGh+WIaTcFNWF2Dp4QDPzO/qB1f3jQVE0=",
+            "source_code_size": 4204,
+            "tags": {
+              "Layer": "Silver"
+            },
+            "tags_all": {
+              "Layer": "Silver"
+            },
+            "timeout": 300,
+            "timeouts": null,
+            "tracing_config": [
+              {
+                "mode": "PassThrough"
+              }
+            ],
+            "version": "$LATEST",
+            "vpc_config": [
+              {
+                "ipv6_allowed_for_dual_stack": false,
+                "security_group_ids": [
+                  "sg-0887893cc66ef4f48"
+                ],
+                "subnet_ids": [
+                  "subnet-00b4314b43b58ea16",
+                  "subnet-0e25c287728eb13ea"
+                ],
+                "vpc_id": "vpc-065aaaed5c78d7ca7"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.normalization_hn",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.security.aws_iam_role.normalization_hn",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "managed",
+      "type": "aws_lambda_function",
+      "name": "normalization_x",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architectures": [
+              "x86_64"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-x",
+            "code_sha256": "l5ZyBKZrJfdZxhyf/NlQnCKgFAEea5QYOum34kFZwQs=",
+            "code_signing_config_arn": "",
+            "dead_letter_config": [],
+            "description": "Silver: normalizes X/Twitter bronze data and writes Parquet to S3",
+            "environment": [
+              {
+                "variables": {
+                  "DATA_LAKE_BUCKET": "social-media-pipeline-dev-datalake-1993e918"
+                }
+              }
+            ],
+            "ephemeral_storage": [
+              {
+                "size": 512
+              }
+            ],
+            "file_system_config": [],
+            "filename": "./src/normalization_x/package.zip",
+            "function_name": "social-media-pipeline-dev-normalization-x",
+            "handler": "lambda_function.lambda_handler",
+            "id": "social-media-pipeline-dev-normalization-x",
+            "image_config": [],
+            "image_uri": "",
+            "invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-x/invocations",
+            "kms_key_arn": "",
+            "last_modified": "2026-07-03T00:35:19.000+0000",
+            "layers": [
+              "arn:aws:lambda:us-east-1:989211373225:layer:social-media-pipeline-dev-silver-common:4"
+            ],
+            "logging_config": [
+              {
+                "application_log_level": "",
+                "log_format": "Text",
+                "log_group": "/aws/lambda/social-media-pipeline-dev-normalization-x",
+                "system_log_level": ""
+              }
+            ],
+            "memory_size": 1024,
+            "package_type": "Zip",
+            "publish": false,
+            "qualified_arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-x:$LATEST",
+            "qualified_invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-x:$LATEST/invocations",
+            "replace_security_groups_on_destroy": null,
+            "replacement_security_group_ids": null,
+            "reserved_concurrent_executions": -1,
+            "role": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-normalization-x-role",
+            "runtime": "python3.12",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "snap_start": [],
+            "source_code_hash": "l5ZyBKZrJfdZxhyf/NlQnCKgFAEea5QYOum34kFZwQs=",
+            "source_code_size": 8998,
+            "tags": {
+              "Layer": "Silver"
+            },
+            "tags_all": {
+              "Layer": "Silver"
+            },
+            "timeout": 300,
+            "timeouts": null,
+            "tracing_config": [
+              {
+                "mode": "PassThrough"
+              }
+            ],
+            "version": "$LATEST",
+            "vpc_config": [
+              {
+                "ipv6_allowed_for_dual_stack": false,
+                "security_group_ids": [
+                  "sg-0887893cc66ef4f48"
+                ],
+                "subnet_ids": [
+                  "subnet-00b4314b43b58ea16",
+                  "subnet-0e25c287728eb13ea"
+                ],
+                "vpc_id": "vpc-065aaaed5c78d7ca7"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.normalization_x",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.security.aws_iam_role.normalization_x",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "managed",
+      "type": "aws_lambda_function",
+      "name": "notification",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architectures": [
+              "x86_64"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-notification",
+            "code_sha256": "6lJgwOG7JhuwARyZZ5wGD2FqwJnNFexYaMVD0zMqoKA=",
+            "code_signing_config_arn": "",
+            "dead_letter_config": [],
+            "description": "Sends a Discord notification when a Lambda reports an error via SNS",
+            "environment": [
+              {
+                "variables": {
+                  "DISCORD_WEBHOOK_URL": "https://discord.com/api/webhooks/1509951757994692819/jrZt2AKitUst_bRZDNh5tBn5M8guJHoJ0wiengJVHCwjQfR7e9QpiB_OE9GyWH5EKby8"
+                }
+              }
+            ],
+            "ephemeral_storage": [
+              {
+                "size": 512
+              }
+            ],
+            "file_system_config": [],
+            "filename": "./src/notification/package.zip",
+            "function_name": "social-media-pipeline-dev-notification",
+            "handler": "lambda_function.lambda_handler",
+            "id": "social-media-pipeline-dev-notification",
+            "image_config": [],
+            "image_uri": "",
+            "invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-notification/invocations",
+            "kms_key_arn": "",
+            "last_modified": "2026-07-03T00:35:13.000+0000",
+            "layers": [],
+            "logging_config": [
+              {
+                "application_log_level": "",
+                "log_format": "Text",
+                "log_group": "/aws/lambda/social-media-pipeline-dev-notification",
+                "system_log_level": ""
+              }
+            ],
+            "memory_size": 128,
+            "package_type": "Zip",
+            "publish": false,
+            "qualified_arn": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-notification:$LATEST",
+            "qualified_invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-notification:$LATEST/invocations",
+            "replace_security_groups_on_destroy": null,
+            "replacement_security_group_ids": null,
+            "reserved_concurrent_executions": -1,
+            "role": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-notification-role",
+            "runtime": "python3.12",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "snap_start": [],
+            "source_code_hash": "6lJgwOG7JhuwARyZZ5wGD2FqwJnNFexYaMVD0zMqoKA=",
+            "source_code_size": 2713,
+            "tags": {
+              "Layer": "Notification"
+            },
+            "tags_all": {
+              "Layer": "Notification"
+            },
+            "timeout": 30,
+            "timeouts": null,
+            "tracing_config": [
+              {
+                "mode": "PassThrough"
+              }
+            ],
+            "version": "$LATEST",
+            "vpc_config": []
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "environment"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": 0,
+                  "type": "number"
+                }
+              },
+              {
+                "type": "get_attr",
+                "value": "variables"
+              },
+              {
+                "type": "index",
+                "value": {
+                  "value": "DISCORD_WEBHOOK_URL",
+                  "type": "string"
+                }
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.data.archive_file.notification",
+            "module.security.aws_iam_role.notification"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "managed",
+      "type": "aws_lambda_layer_version",
+      "name": "delivery_common",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:lambda:us-east-1:989211373225:layer:social-media-pipeline-dev-delivery-common:1",
+            "code_sha256": "kzav55NQNadH7/6tdqGZR/JHPuVksbPFrj7zTT5MhFs=",
+            "compatible_architectures": [],
+            "compatible_runtimes": [
+              "python3.12"
+            ],
+            "created_date": "2026-07-02T22:40:34.198+0000",
+            "description": "PostgreSQL driver (pg8000) for the delivery Lambda",
+            "filename": "./src/layers/delivery_common_layer.zip",
+            "id": "arn:aws:lambda:us-east-1:989211373225:layer:social-media-pipeline-dev-delivery-common:1",
+            "layer_arn": "arn:aws:lambda:us-east-1:989211373225:layer:social-media-pipeline-dev-delivery-common",
+            "layer_name": "social-media-pipeline-dev-delivery-common",
+            "license_info": "",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "source_code_hash": "kzav55NQNadH7/6tdqGZR/JHPuVksbPFrj7zTT5MhFs=",
+            "source_code_size": 427509,
+            "version": "1"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.compute.data.archive_file.delivery_common_layer"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.compute",
+      "mode": "managed",
+      "type": "aws_lambda_layer_version",
+      "name": "silver_common",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:lambda:us-east-1:989211373225:layer:social-media-pipeline-dev-silver-common:4",
+            "code_sha256": "YOSF+GQ2R9HuI8DDkuTWZVasObrabTfm4yH0DPZ3k2Q=",
+            "compatible_architectures": [],
+            "compatible_runtimes": [
+              "python3.12"
+            ],
+            "created_date": "2026-07-02T19:57:29.879+0000",
+            "description": "Shared Silver layer helpers (silver_common.py) + beautifulsoup4",
+            "filename": "./src/layers/silver_common_layer.zip",
+            "id": "arn:aws:lambda:us-east-1:989211373225:layer:social-media-pipeline-dev-silver-common:4",
+            "layer_arn": "arn:aws:lambda:us-east-1:989211373225:layer:social-media-pipeline-dev-silver-common",
+            "layer_name": "social-media-pipeline-dev-silver-common",
+            "license_info": "",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "source_code_hash": "YOSF+GQ2R9HuI8DDkuTWZVasObrabTfm4yH0DPZ3k2Q=",
+            "source_code_size": 42630333,
+            "version": "4"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.compute.data.archive_file.silver_common_layer"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "data",
+      "type": "aws_availability_zones",
+      "name": "available",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "all_availability_zones": null,
+            "exclude_names": null,
+            "exclude_zone_ids": null,
+            "filter": null,
+            "group_names": [
+              "us-east-1-zg-1"
+            ],
+            "id": "us-east-1",
+            "names": [
+              "us-east-1a",
+              "us-east-1b",
+              "us-east-1c",
+              "us-east-1d",
+              "us-east-1e",
+              "us-east-1f"
+            ],
+            "state": "available",
+            "timeouts": null,
+            "zone_ids": [
+              "use1-az1",
+              "use1-az2",
+              "use1-az4",
+              "use1-az6",
+              "use1-az3",
+              "use1-az5"
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "data",
+      "type": "aws_region",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "description": "US East (N. Virginia)",
+            "endpoint": "ec2.us-east-1.amazonaws.com",
+            "id": "us-east-1",
+            "name": "us-east-1"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_internet_gateway",
+      "name": "main",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:989211373225:internet-gateway/igw-09bdf45e86d0d182e",
+            "id": "igw-09bdf45e86d0d182e",
+            "owner_id": "989211373225",
+            "tags": {
+              "Name": "social-media-pipeline-dev-igw"
+            },
+            "tags_all": {
+              "Name": "social-media-pipeline-dev-igw"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-065aaaed5c78d7ca7"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.networking.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_route_table",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:989211373225:route-table/rtb-00b44776f601f3d1a",
+            "id": "rtb-00b44776f601f3d1a",
+            "owner_id": "989211373225",
+            "propagating_vgws": [],
+            "route": [
+              {
+                "carrier_gateway_id": "",
+                "cidr_block": "0.0.0.0/0",
+                "core_network_arn": "",
+                "destination_prefix_list_id": "",
+                "egress_only_gateway_id": "",
+                "gateway_id": "igw-09bdf45e86d0d182e",
+                "ipv6_cidr_block": "",
+                "local_gateway_id": "",
+                "nat_gateway_id": "",
+                "network_interface_id": "",
+                "transit_gateway_id": "",
+                "vpc_endpoint_id": "",
+                "vpc_peering_connection_id": ""
+              }
+            ],
+            "tags": {
+              "Name": "social-media-pipeline-dev-rt"
+            },
+            "tags_all": {
+              "Name": "social-media-pipeline-dev-rt"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-065aaaed5c78d7ca7"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.networking.aws_internet_gateway.main",
+            "module.networking.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_route_table_association",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-09d096650d4ddc4f0",
+            "route_table_id": "rtb-00b44776f601f3d1a",
+            "subnet_id": "subnet-00b4314b43b58ea16",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.networking.aws_internet_gateway.main",
+            "module.networking.aws_route_table.public",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-07b18da32a412e47d",
+            "route_table_id": "rtb-00b44776f601f3d1a",
+            "subnet_id": "subnet-0e25c287728eb13ea",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.networking.aws_internet_gateway.main",
+            "module.networking.aws_route_table.public",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "ec2",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:989211373225:security-group/sg-01b2a7e4eeab65f3b",
+            "description": "EC2 instance running Superset and PostgreSQL",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              }
+            ],
+            "id": "sg-01b2a7e4eeab65f3b",
+            "ingress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "SSH access",
+                "from_port": 22,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 22
+              },
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "Superset web UI",
+                "from_port": 8088,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 8088
+              }
+            ],
+            "name": "social-media-pipeline-dev-ec2-sg",
+            "name_prefix": "",
+            "owner_id": "989211373225",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "social-media-pipeline-dev-ec2-sg"
+            },
+            "tags_all": {
+              "Name": "social-media-pipeline-dev-ec2-sg"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-065aaaed5c78d7ca7"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "module.networking.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "lambda_vpc",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:989211373225:security-group/sg-0887893cc66ef4f48",
+            "description": "VPC Lambda functions - egress to Postgres and S3 endpoint only",
+            "egress": [
+              {
+                "cidr_blocks": [],
+                "description": "Lambda to PostgreSQL on EC2",
+                "from_port": 5432,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [
+                  "sg-01b2a7e4eeab65f3b"
+                ],
+                "self": false,
+                "to_port": 5432
+              },
+              {
+                "cidr_blocks": [],
+                "description": "Lambda to S3 via Gateway Endpoint",
+                "from_port": 443,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [
+                  "pl-63a5400a"
+                ],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 443
+              }
+            ],
+            "id": "sg-0887893cc66ef4f48",
+            "ingress": [],
+            "name": "social-media-pipeline-dev-lambda-vpc-sg",
+            "name_prefix": "",
+            "owner_id": "989211373225",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "social-media-pipeline-dev-lambda-vpc-sg"
+            },
+            "tags_all": {
+              "Name": "social-media-pipeline-dev-lambda-vpc-sg"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-065aaaed5c78d7ca7"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "module.networking.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_security_group_rule",
+      "name": "ec2_ingress_postgres",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": null,
+            "description": "PostgreSQL accepts connections from Lambda SG only",
+            "from_port": 5432,
+            "id": "sgrule-4020491673",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_group_id": "sg-01b2a7e4eeab65f3b",
+            "security_group_rule_id": "sgr-0bf56c85445279d18",
+            "self": false,
+            "source_security_group_id": "sg-0887893cc66ef4f48",
+            "timeouts": null,
+            "to_port": 5432,
+            "type": "ingress"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDB9LCJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_security_group_rule",
+      "name": "lambda_egress_postgres",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": null,
+            "description": "Lambda to PostgreSQL on EC2",
+            "from_port": 5432,
+            "id": "sgrule-2675668318",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_group_id": "sg-0887893cc66ef4f48",
+            "security_group_rule_id": "sgr-04b0c0d47b6a2d1e0",
+            "self": false,
+            "source_security_group_id": "sg-01b2a7e4eeab65f3b",
+            "timeouts": null,
+            "to_port": 5432,
+            "type": "egress"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDB9LCJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_security_group_rule",
+      "name": "lambda_egress_s3",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": null,
+            "description": "Lambda to S3 via Gateway Endpoint",
+            "from_port": 443,
+            "id": "sgrule-3339894933",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": [
+              "pl-63a5400a"
+            ],
+            "protocol": "tcp",
+            "security_group_id": "sg-0887893cc66ef4f48",
+            "security_group_rule_id": "sgr-0bbdca297aeb4b7ae",
+            "self": false,
+            "source_security_group_id": null,
+            "timeouts": null,
+            "to_port": 443,
+            "type": "egress"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDB9LCJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.networking.aws_internet_gateway.main",
+            "module.networking.aws_route_table.public",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_vpc.main",
+            "module.networking.aws_vpc_endpoint.s3",
+            "module.networking.data.aws_region.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:989211373225:subnet/subnet-00b4314b43b58ea16",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "us-east-1a",
+            "availability_zone_id": "use1-az1",
+            "cidr_block": "10.0.0.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-00b4314b43b58ea16",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": true,
+            "outpost_arn": "",
+            "owner_id": "989211373225",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "social-media-pipeline-dev-subnet-1"
+            },
+            "tags_all": {
+              "Name": "social-media-pipeline-dev-subnet-1"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-065aaaed5c78d7ca7"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:989211373225:subnet/subnet-0e25c287728eb13ea",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "us-east-1b",
+            "availability_zone_id": "use1-az2",
+            "cidr_block": "10.0.1.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-0e25c287728eb13ea",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": true,
+            "outpost_arn": "",
+            "owner_id": "989211373225",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "social-media-pipeline-dev-subnet-2"
+            },
+            "tags_all": {
+              "Name": "social-media-pipeline-dev-subnet-2"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-065aaaed5c78d7ca7"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_vpc",
+      "name": "main",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:989211373225:vpc/vpc-065aaaed5c78d7ca7",
+            "assign_generated_ipv6_cidr_block": false,
+            "cidr_block": "10.0.0.0/16",
+            "default_network_acl_id": "acl-06def87b85970b9e8",
+            "default_route_table_id": "rtb-0f159084625677e41",
+            "default_security_group_id": "sg-03f21e240bf088949",
+            "dhcp_options_id": "dopt-00cf379f7379e0c20",
+            "enable_dns_hostnames": true,
+            "enable_dns_support": true,
+            "enable_network_address_usage_metrics": false,
+            "id": "vpc-065aaaed5c78d7ca7",
+            "instance_tenancy": "default",
+            "ipv4_ipam_pool_id": null,
+            "ipv4_netmask_length": null,
+            "ipv6_association_id": "",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_network_border_group": "",
+            "ipv6_ipam_pool_id": "",
+            "ipv6_netmask_length": 0,
+            "main_route_table_id": "rtb-0f159084625677e41",
+            "owner_id": "989211373225",
+            "tags": {
+              "Name": "social-media-pipeline-dev-vpc"
+            },
+            "tags_all": {
+              "Name": "social-media-pipeline-dev-vpc"
+            }
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ=="
+        }
+      ]
+    },
+    {
+      "module": "module.networking",
+      "mode": "managed",
+      "type": "aws_vpc_endpoint",
+      "name": "s3",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:989211373225:vpc-endpoint/vpce-0c8741477fdf31523",
+            "auto_accept": null,
+            "cidr_blocks": [
+              "16.15.176.0/20",
+              "16.182.0.0/16",
+              "18.34.0.0/19",
+              "52.216.0.0/15",
+              "54.231.0.0/16",
+              "3.5.0.0/19",
+              "18.34.232.0/21",
+              "16.15.192.0/18"
+            ],
+            "dns_entry": [],
+            "dns_options": [
+              {
+                "dns_record_ip_type": "service-defined",
+                "private_dns_only_for_inbound_resolver_endpoint": false
+              }
+            ],
+            "id": "vpce-0c8741477fdf31523",
+            "ip_address_type": "ipv4",
+            "network_interface_ids": [],
+            "owner_id": "989211373225",
+            "policy": "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2008-10-17\"}",
+            "prefix_list_id": "pl-63a5400a",
+            "private_dns_enabled": false,
+            "requester_managed": false,
+            "resource_configuration_arn": "",
+            "route_table_ids": [
+              "rtb-00b44776f601f3d1a"
+            ],
+            "security_group_ids": [],
+            "service_name": "com.amazonaws.us-east-1.s3",
+            "service_network_arn": "",
+            "service_region": "us-east-1",
+            "state": "available",
+            "subnet_configuration": [],
+            "subnet_ids": [],
+            "tags": {
+              "Name": "social-media-pipeline-dev-s3-endpoint"
+            },
+            "tags_all": {
+              "Name": "social-media-pipeline-dev-s3-endpoint"
+            },
+            "timeouts": null,
+            "vpc_endpoint_type": "Gateway",
+            "vpc_id": "vpc-065aaaed5c78d7ca7"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.networking.aws_internet_gateway.main",
+            "module.networking.aws_route_table.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_region.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_cloudwatch_event_rule",
+      "name": "daily_pipeline",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "status": "tainted",
+          "schema_version": 1,
+          "attributes": {
+            "arn": null,
+            "description": "Starts the full pipeline state machine every day at 02:00 UTC",
+            "event_bus_name": "default",
+            "event_pattern": null,
+            "force_destroy": false,
+            "id": "social-media-pipeline-dev-daily-ingestion",
+            "is_enabled": null,
+            "name": "social-media-pipeline-dev-daily-ingestion",
+            "name_prefix": null,
+            "role_arn": null,
+            "schedule_expression": "cron(0 2 * * ? *)",
+            "state": null,
+            "tags": null,
+            "tags_all": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ=="
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_cloudwatch_metric_alarm",
+      "name": "lambda_errors",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "social-media-pipeline-dev-analytics",
+          "schema_version": 1,
+          "attributes": {
+            "actions_enabled": true,
+            "alarm_actions": [
+              "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors"
+            ],
+            "alarm_description": "Lambda social-media-pipeline-dev-analytics reported an error",
+            "alarm_name": "social-media-pipeline-dev-analytics-errors",
+            "arn": "arn:aws:cloudwatch:us-east-1:989211373225:alarm:social-media-pipeline-dev-analytics-errors",
+            "comparison_operator": "GreaterThanOrEqualToThreshold",
+            "datapoints_to_alarm": 0,
+            "dimensions": {
+              "FunctionName": "social-media-pipeline-dev-analytics"
+            },
+            "evaluate_low_sample_count_percentiles": "",
+            "evaluation_periods": 1,
+            "extended_statistic": "",
+            "id": "social-media-pipeline-dev-analytics-errors",
+            "insufficient_data_actions": [],
+            "metric_name": "Errors",
+            "metric_query": [],
+            "namespace": "AWS/Lambda",
+            "ok_actions": [],
+            "period": 300,
+            "statistic": "Sum",
+            "tags": {},
+            "tags_all": {},
+            "threshold": 1,
+            "threshold_metric_id": "",
+            "treat_missing_data": "notBreaching",
+            "unit": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.analytics",
+            "module.compute.aws_lambda_function.delivery",
+            "module.compute.aws_lambda_function.ingestion",
+            "module.compute.aws_lambda_function.normalization_hn",
+            "module.compute.aws_lambda_function.normalization_x",
+            "module.compute.aws_lambda_layer_version.delivery_common",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.analytics",
+            "module.compute.data.archive_file.delivery",
+            "module.compute.data.archive_file.delivery_common_layer",
+            "module.compute.data.archive_file.ingestion",
+            "module.compute.data.archive_file.normalization_hn",
+            "module.compute.data.archive_file.normalization_x",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.orchestration.aws_sns_topic.lambda_errors",
+            "module.security.aws_iam_role.analytics",
+            "module.security.aws_iam_role.delivery",
+            "module.security.aws_iam_role.ingestion",
+            "module.security.aws_iam_role.normalization_hn",
+            "module.security.aws_iam_role.normalization_x",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix",
+            "module.visualization.aws_instance.visualization",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        },
+        {
+          "index_key": "social-media-pipeline-dev-delivery",
+          "schema_version": 1,
+          "attributes": {
+            "actions_enabled": true,
+            "alarm_actions": [
+              "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors"
+            ],
+            "alarm_description": "Lambda social-media-pipeline-dev-delivery reported an error",
+            "alarm_name": "social-media-pipeline-dev-delivery-errors",
+            "arn": "arn:aws:cloudwatch:us-east-1:989211373225:alarm:social-media-pipeline-dev-delivery-errors",
+            "comparison_operator": "GreaterThanOrEqualToThreshold",
+            "datapoints_to_alarm": 0,
+            "dimensions": {
+              "FunctionName": "social-media-pipeline-dev-delivery"
+            },
+            "evaluate_low_sample_count_percentiles": "",
+            "evaluation_periods": 1,
+            "extended_statistic": "",
+            "id": "social-media-pipeline-dev-delivery-errors",
+            "insufficient_data_actions": [],
+            "metric_name": "Errors",
+            "metric_query": [],
+            "namespace": "AWS/Lambda",
+            "ok_actions": [],
+            "period": 300,
+            "statistic": "Sum",
+            "tags": {},
+            "tags_all": {},
+            "threshold": 1,
+            "threshold_metric_id": "",
+            "treat_missing_data": "notBreaching",
+            "unit": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.analytics",
+            "module.compute.aws_lambda_function.delivery",
+            "module.compute.aws_lambda_function.ingestion",
+            "module.compute.aws_lambda_function.normalization_hn",
+            "module.compute.aws_lambda_function.normalization_x",
+            "module.compute.aws_lambda_layer_version.delivery_common",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.analytics",
+            "module.compute.data.archive_file.delivery",
+            "module.compute.data.archive_file.delivery_common_layer",
+            "module.compute.data.archive_file.ingestion",
+            "module.compute.data.archive_file.normalization_hn",
+            "module.compute.data.archive_file.normalization_x",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.orchestration.aws_sns_topic.lambda_errors",
+            "module.security.aws_iam_role.analytics",
+            "module.security.aws_iam_role.delivery",
+            "module.security.aws_iam_role.ingestion",
+            "module.security.aws_iam_role.normalization_hn",
+            "module.security.aws_iam_role.normalization_x",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix",
+            "module.visualization.aws_instance.visualization",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        },
+        {
+          "index_key": "social-media-pipeline-dev-ingestion",
+          "schema_version": 1,
+          "attributes": {
+            "actions_enabled": true,
+            "alarm_actions": [
+              "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors"
+            ],
+            "alarm_description": "Lambda social-media-pipeline-dev-ingestion reported an error",
+            "alarm_name": "social-media-pipeline-dev-ingestion-errors",
+            "arn": "arn:aws:cloudwatch:us-east-1:989211373225:alarm:social-media-pipeline-dev-ingestion-errors",
+            "comparison_operator": "GreaterThanOrEqualToThreshold",
+            "datapoints_to_alarm": 0,
+            "dimensions": {
+              "FunctionName": "social-media-pipeline-dev-ingestion"
+            },
+            "evaluate_low_sample_count_percentiles": "",
+            "evaluation_periods": 1,
+            "extended_statistic": "",
+            "id": "social-media-pipeline-dev-ingestion-errors",
+            "insufficient_data_actions": [],
+            "metric_name": "Errors",
+            "metric_query": [],
+            "namespace": "AWS/Lambda",
+            "ok_actions": [],
+            "period": 300,
+            "statistic": "Sum",
+            "tags": {},
+            "tags_all": {},
+            "threshold": 1,
+            "threshold_metric_id": "",
+            "treat_missing_data": "notBreaching",
+            "unit": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.analytics",
+            "module.compute.aws_lambda_function.delivery",
+            "module.compute.aws_lambda_function.ingestion",
+            "module.compute.aws_lambda_function.normalization_hn",
+            "module.compute.aws_lambda_function.normalization_x",
+            "module.compute.aws_lambda_layer_version.delivery_common",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.analytics",
+            "module.compute.data.archive_file.delivery",
+            "module.compute.data.archive_file.delivery_common_layer",
+            "module.compute.data.archive_file.ingestion",
+            "module.compute.data.archive_file.normalization_hn",
+            "module.compute.data.archive_file.normalization_x",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.orchestration.aws_sns_topic.lambda_errors",
+            "module.security.aws_iam_role.analytics",
+            "module.security.aws_iam_role.delivery",
+            "module.security.aws_iam_role.ingestion",
+            "module.security.aws_iam_role.normalization_hn",
+            "module.security.aws_iam_role.normalization_x",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix",
+            "module.visualization.aws_instance.visualization",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        },
+        {
+          "index_key": "social-media-pipeline-dev-normalization-hn",
+          "schema_version": 1,
+          "attributes": {
+            "actions_enabled": true,
+            "alarm_actions": [
+              "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors"
+            ],
+            "alarm_description": "Lambda social-media-pipeline-dev-normalization-hn reported an error",
+            "alarm_name": "social-media-pipeline-dev-normalization-hn-errors",
+            "arn": "arn:aws:cloudwatch:us-east-1:989211373225:alarm:social-media-pipeline-dev-normalization-hn-errors",
+            "comparison_operator": "GreaterThanOrEqualToThreshold",
+            "datapoints_to_alarm": 0,
+            "dimensions": {
+              "FunctionName": "social-media-pipeline-dev-normalization-hn"
+            },
+            "evaluate_low_sample_count_percentiles": "",
+            "evaluation_periods": 1,
+            "extended_statistic": "",
+            "id": "social-media-pipeline-dev-normalization-hn-errors",
+            "insufficient_data_actions": [],
+            "metric_name": "Errors",
+            "metric_query": [],
+            "namespace": "AWS/Lambda",
+            "ok_actions": [],
+            "period": 300,
+            "statistic": "Sum",
+            "tags": {},
+            "tags_all": {},
+            "threshold": 1,
+            "threshold_metric_id": "",
+            "treat_missing_data": "notBreaching",
+            "unit": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.analytics",
+            "module.compute.aws_lambda_function.delivery",
+            "module.compute.aws_lambda_function.ingestion",
+            "module.compute.aws_lambda_function.normalization_hn",
+            "module.compute.aws_lambda_function.normalization_x",
+            "module.compute.aws_lambda_layer_version.delivery_common",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.analytics",
+            "module.compute.data.archive_file.delivery",
+            "module.compute.data.archive_file.delivery_common_layer",
+            "module.compute.data.archive_file.ingestion",
+            "module.compute.data.archive_file.normalization_hn",
+            "module.compute.data.archive_file.normalization_x",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.orchestration.aws_sns_topic.lambda_errors",
+            "module.security.aws_iam_role.analytics",
+            "module.security.aws_iam_role.delivery",
+            "module.security.aws_iam_role.ingestion",
+            "module.security.aws_iam_role.normalization_hn",
+            "module.security.aws_iam_role.normalization_x",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix",
+            "module.visualization.aws_instance.visualization",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        },
+        {
+          "index_key": "social-media-pipeline-dev-normalization-x",
+          "schema_version": 1,
+          "attributes": {
+            "actions_enabled": true,
+            "alarm_actions": [
+              "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors"
+            ],
+            "alarm_description": "Lambda social-media-pipeline-dev-normalization-x reported an error",
+            "alarm_name": "social-media-pipeline-dev-normalization-x-errors",
+            "arn": "arn:aws:cloudwatch:us-east-1:989211373225:alarm:social-media-pipeline-dev-normalization-x-errors",
+            "comparison_operator": "GreaterThanOrEqualToThreshold",
+            "datapoints_to_alarm": 0,
+            "dimensions": {
+              "FunctionName": "social-media-pipeline-dev-normalization-x"
+            },
+            "evaluate_low_sample_count_percentiles": "",
+            "evaluation_periods": 1,
+            "extended_statistic": "",
+            "id": "social-media-pipeline-dev-normalization-x-errors",
+            "insufficient_data_actions": [],
+            "metric_name": "Errors",
+            "metric_query": [],
+            "namespace": "AWS/Lambda",
+            "ok_actions": [],
+            "period": 300,
+            "statistic": "Sum",
+            "tags": {},
+            "tags_all": {},
+            "threshold": 1,
+            "threshold_metric_id": "",
+            "treat_missing_data": "notBreaching",
+            "unit": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.analytics",
+            "module.compute.aws_lambda_function.delivery",
+            "module.compute.aws_lambda_function.ingestion",
+            "module.compute.aws_lambda_function.normalization_hn",
+            "module.compute.aws_lambda_function.normalization_x",
+            "module.compute.aws_lambda_layer_version.delivery_common",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.analytics",
+            "module.compute.data.archive_file.delivery",
+            "module.compute.data.archive_file.delivery_common_layer",
+            "module.compute.data.archive_file.ingestion",
+            "module.compute.data.archive_file.normalization_hn",
+            "module.compute.data.archive_file.normalization_x",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.orchestration.aws_sns_topic.lambda_errors",
+            "module.security.aws_iam_role.analytics",
+            "module.security.aws_iam_role.delivery",
+            "module.security.aws_iam_role.ingestion",
+            "module.security.aws_iam_role.normalization_hn",
+            "module.security.aws_iam_role.normalization_x",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix",
+            "module.visualization.aws_instance.visualization",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "eventbridge_sfn",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-eventbridge-sfn-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"events.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-07-03T00:35:06Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "social-media-pipeline-dev-eventbridge-sfn-role",
+            "inline_policy": [],
+            "managed_policy_arns": [],
+            "max_session_duration": 3600,
+            "name": "social-media-pipeline-dev-eventbridge-sfn-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": null,
+            "tags_all": {},
+            "unique_id": "AROA6MUMXV2U3WVQMBZMQ"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "sfn",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-pipeline-sfn-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"states.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-07-03T00:35:06Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "social-media-pipeline-dev-pipeline-sfn-role",
+            "inline_policy": [],
+            "managed_policy_arns": [],
+            "max_session_duration": 3600,
+            "name": "social-media-pipeline-dev-pipeline-sfn-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": null,
+            "tags_all": {},
+            "unique_id": "AROA6MUMXV2U27PJDUDWB"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "eventbridge_start_execution",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-eventbridge-sfn-role:start-pipeline-execution",
+            "name": "start-pipeline-execution",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"states:StartExecution\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:states:us-east-1:989211373225:stateMachine:social-media-pipeline-dev-pipeline\"}]}",
+            "role": "social-media-pipeline-dev-eventbridge-sfn-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.analytics",
+            "module.compute.aws_lambda_function.delivery",
+            "module.compute.aws_lambda_function.ingestion",
+            "module.compute.aws_lambda_function.normalization_hn",
+            "module.compute.aws_lambda_function.normalization_x",
+            "module.compute.aws_lambda_function.notification",
+            "module.compute.aws_lambda_layer_version.delivery_common",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.analytics",
+            "module.compute.data.archive_file.delivery",
+            "module.compute.data.archive_file.delivery_common_layer",
+            "module.compute.data.archive_file.ingestion",
+            "module.compute.data.archive_file.normalization_hn",
+            "module.compute.data.archive_file.normalization_x",
+            "module.compute.data.archive_file.notification",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.orchestration.aws_iam_role.eventbridge_sfn",
+            "module.orchestration.aws_iam_role.sfn",
+            "module.orchestration.aws_sfn_state_machine.pipeline",
+            "module.security.aws_iam_role.analytics",
+            "module.security.aws_iam_role.delivery",
+            "module.security.aws_iam_role.ingestion",
+            "module.security.aws_iam_role.normalization_hn",
+            "module.security.aws_iam_role.normalization_x",
+            "module.security.aws_iam_role.notification",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix",
+            "module.visualization.aws_instance.visualization",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "sfn_invoke_lambdas",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-pipeline-sfn-role:invoke-pipeline-lambdas",
+            "name": "invoke-pipeline-lambdas",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"lambda:InvokeFunction\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-ingestion\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-ingestion:*\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-hn\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-hn:*\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-x\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-x:*\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-analytics\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-analytics:*\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-delivery\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-delivery:*\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-notification\",\"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-notification:*\"],\"Sid\":\"InvokePipelineLambdas\"}]}",
+            "role": "social-media-pipeline-dev-pipeline-sfn-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.analytics",
+            "module.compute.aws_lambda_function.delivery",
+            "module.compute.aws_lambda_function.ingestion",
+            "module.compute.aws_lambda_function.normalization_hn",
+            "module.compute.aws_lambda_function.normalization_x",
+            "module.compute.aws_lambda_function.notification",
+            "module.compute.aws_lambda_layer_version.delivery_common",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.analytics",
+            "module.compute.data.archive_file.delivery",
+            "module.compute.data.archive_file.delivery_common_layer",
+            "module.compute.data.archive_file.ingestion",
+            "module.compute.data.archive_file.normalization_hn",
+            "module.compute.data.archive_file.normalization_x",
+            "module.compute.data.archive_file.notification",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.orchestration.aws_iam_role.sfn",
+            "module.security.aws_iam_role.analytics",
+            "module.security.aws_iam_role.delivery",
+            "module.security.aws_iam_role.ingestion",
+            "module.security.aws_iam_role.normalization_hn",
+            "module.security.aws_iam_role.normalization_x",
+            "module.security.aws_iam_role.notification",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix",
+            "module.visualization.aws_instance.visualization",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_lambda_permission",
+      "name": "sns_notification",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "action": "lambda:InvokeFunction",
+            "event_source_token": null,
+            "function_name": "social-media-pipeline-dev-notification",
+            "function_url_auth_type": null,
+            "id": "AllowSNSInvoke",
+            "principal": "sns.amazonaws.com",
+            "principal_org_id": null,
+            "qualifier": "",
+            "source_account": null,
+            "source_arn": "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors",
+            "statement_id": "AllowSNSInvoke",
+            "statement_id_prefix": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.notification",
+            "module.compute.data.archive_file.notification",
+            "module.orchestration.aws_sns_topic.lambda_errors",
+            "module.security.aws_iam_role.notification"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_sfn_state_machine",
+      "name": "pipeline",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:states:us-east-1:989211373225:stateMachine:social-media-pipeline-dev-pipeline",
+            "creation_date": "2026-07-03T00:35:26Z",
+            "definition": "{\n  \"Comment\": \"Daily pipeline: ingestion -\u003e (normalization_hn || normalization_x) -\u003e analytics -\u003e delivery. The date resolved by ingestion (event date or yesterday) is threaded through every downstream step, so all steps always operate on the same day even across a midnight boundary. Failures anywhere route to NotifyFailure with the failing Lambda's full error detail.\",\n  \"StartAt\": \"Ingestion\",\n  \"TimeoutSeconds\": 1800,\n  \"States\": {\n    \"Ingestion\": {\n      \"Type\": \"Task\",\n      \"Resource\": \"arn:aws:states:::lambda:invoke\",\n      \"Parameters\": {\n        \"FunctionName\": \"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-ingestion\",\n        \"Payload.$\": \"$\"\n      },\n      \"ResultSelector\": {\n        \"date.$\": \"$.Payload.date\"\n      },\n      \"ResultPath\": \"$.ingestion\",\n      \"TimeoutSeconds\": 360,\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\n            \"Lambda.ServiceException\",\n            \"Lambda.AWSLambdaException\",\n            \"Lambda.SdkClientException\",\n            \"Lambda.TooManyRequestsException\"\n          ],\n          \"IntervalSeconds\": 5,\n          \"MaxAttempts\": 3,\n          \"BackoffRate\": 2.0\n        }\n      ],\n      \"Catch\": [\n        {\n          \"ErrorEquals\": [\"States.ALL\"],\n          \"ResultPath\": \"$.error\",\n          \"Next\": \"IngestionFailed\"\n        }\n      ],\n      \"Next\": \"Normalization\"\n    },\n\n    \"Normalization\": {\n      \"Type\": \"Parallel\",\n      \"ResultPath\": \"$.normalization\",\n      \"Catch\": [\n        {\n          \"ErrorEquals\": [\"States.ALL\"],\n          \"ResultPath\": \"$.error\",\n          \"Next\": \"NormalizationFailed\"\n        }\n      ],\n      \"Branches\": [\n        {\n          \"StartAt\": \"NormalizationHN\",\n          \"States\": {\n            \"NormalizationHN\": {\n              \"Type\": \"Task\",\n              \"Resource\": \"arn:aws:states:::lambda:invoke\",\n              \"Parameters\": {\n                \"FunctionName\": \"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-hn\",\n                \"Payload\": {\n                  \"date.$\": \"$.ingestion.date\"\n                }\n              },\n              \"ResultSelector\": {\n                \"result.$\": \"$.Payload\"\n              },\n              \"TimeoutSeconds\": 360,\n              \"Retry\": [\n                {\n                  \"ErrorEquals\": [\n                    \"Lambda.ServiceException\",\n                    \"Lambda.AWSLambdaException\",\n                    \"Lambda.SdkClientException\",\n                    \"Lambda.TooManyRequestsException\"\n                  ],\n                  \"IntervalSeconds\": 5,\n                  \"MaxAttempts\": 3,\n                  \"BackoffRate\": 2.0\n                }\n              ],\n              \"End\": true\n            }\n          }\n        },\n        {\n          \"StartAt\": \"NormalizationX\",\n          \"States\": {\n            \"NormalizationX\": {\n              \"Type\": \"Task\",\n              \"Resource\": \"arn:aws:states:::lambda:invoke\",\n              \"Parameters\": {\n                \"FunctionName\": \"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-normalization-x\",\n                \"Payload\": {\n                  \"date.$\": \"$.ingestion.date\"\n                }\n              },\n              \"ResultSelector\": {\n                \"result.$\": \"$.Payload\"\n              },\n              \"TimeoutSeconds\": 360,\n              \"Retry\": [\n                {\n                  \"ErrorEquals\": [\n                    \"Lambda.ServiceException\",\n                    \"Lambda.AWSLambdaException\",\n                    \"Lambda.SdkClientException\",\n                    \"Lambda.TooManyRequestsException\"\n                  ],\n                  \"IntervalSeconds\": 5,\n                  \"MaxAttempts\": 3,\n                  \"BackoffRate\": 2.0\n                }\n              ],\n              \"End\": true\n            }\n          }\n        }\n      ],\n      \"Next\": \"Analytics\"\n    },\n\n    \"Analytics\": {\n      \"Type\": \"Task\",\n      \"Resource\": \"arn:aws:states:::lambda:invoke\",\n      \"Parameters\": {\n        \"FunctionName\": \"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-analytics\",\n        \"Payload\": {\n          \"date.$\": \"$.ingestion.date\"\n        }\n      },\n      \"ResultSelector\": {\n        \"result.$\": \"$.Payload\"\n      },\n      \"ResultPath\": \"$.analytics\",\n      \"TimeoutSeconds\": 360,\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\n            \"Lambda.ServiceException\",\n            \"Lambda.AWSLambdaException\",\n            \"Lambda.SdkClientException\",\n            \"Lambda.TooManyRequestsException\"\n          ],\n          \"IntervalSeconds\": 5,\n          \"MaxAttempts\": 3,\n          \"BackoffRate\": 2.0\n        }\n      ],\n      \"Catch\": [\n        {\n          \"ErrorEquals\": [\"States.ALL\"],\n          \"ResultPath\": \"$.error\",\n          \"Next\": \"AnalyticsFailed\"\n        }\n      ],\n      \"Next\": \"Delivery\"\n    },\n\n    \"Delivery\": {\n      \"Type\": \"Task\",\n      \"Resource\": \"arn:aws:states:::lambda:invoke\",\n      \"Parameters\": {\n        \"FunctionName\": \"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-delivery\",\n        \"Payload\": {\n          \"date.$\": \"$.ingestion.date\"\n        }\n      },\n      \"ResultSelector\": {\n        \"result.$\": \"$.Payload\"\n      },\n      \"ResultPath\": \"$.delivery\",\n      \"TimeoutSeconds\": 360,\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\n            \"Lambda.ServiceException\",\n            \"Lambda.AWSLambdaException\",\n            \"Lambda.SdkClientException\",\n            \"Lambda.TooManyRequestsException\"\n          ],\n          \"IntervalSeconds\": 5,\n          \"MaxAttempts\": 3,\n          \"BackoffRate\": 2.0\n        }\n      ],\n      \"Catch\": [\n        {\n          \"ErrorEquals\": [\"States.ALL\"],\n          \"ResultPath\": \"$.error\",\n          \"Next\": \"DeliveryFailed\"\n        }\n      ],\n      \"End\": true\n    },\n\n    \"IngestionFailed\": {\n      \"Type\": \"Pass\",\n      \"Result\": \"Ingestion\",\n      \"ResultPath\": \"$.failed_step\",\n      \"Next\": \"NotifyFailure\"\n    },\n    \"NormalizationFailed\": {\n      \"Type\": \"Pass\",\n      \"Result\": \"Normalization (HN or X)\",\n      \"ResultPath\": \"$.failed_step\",\n      \"Next\": \"NotifyFailure\"\n    },\n    \"AnalyticsFailed\": {\n      \"Type\": \"Pass\",\n      \"Result\": \"Analytics\",\n      \"ResultPath\": \"$.failed_step\",\n      \"Next\": \"NotifyFailure\"\n    },\n    \"DeliveryFailed\": {\n      \"Type\": \"Pass\",\n      \"Result\": \"Delivery\",\n      \"ResultPath\": \"$.failed_step\",\n      \"Next\": \"NotifyFailure\"\n    },\n\n    \"NotifyFailure\": {\n      \"Type\": \"Task\",\n      \"Resource\": \"arn:aws:states:::lambda:invoke\",\n      \"Parameters\": {\n        \"FunctionName\": \"arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-notification\",\n        \"Payload\": {\n          \"failed_step.$\": \"$.failed_step\",\n          \"error.$\": \"$.error.Error\",\n          \"cause.$\": \"$.error.Cause\",\n          \"execution.$\": \"$$.Execution.Name\",\n          \"state_machine.$\": \"$$.StateMachine.Name\"\n        }\n      },\n      \"TimeoutSeconds\": 60,\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\"States.ALL\"],\n          \"IntervalSeconds\": 5,\n          \"MaxAttempts\": 2,\n          \"BackoffRate\": 2.0\n        }\n      ],\n      \"Catch\": [\n        {\n          \"ErrorEquals\": [\"States.ALL\"],\n          \"ResultPath\": \"$.notify_error\",\n          \"Next\": \"PipelineFailed\"\n        }\n      ],\n      \"Next\": \"PipelineFailed\"\n    },\n\n    \"PipelineFailed\": {\n      \"Type\": \"Fail\",\n      \"Error\": \"PipelineFailed\",\n      \"Cause\": \"A pipeline step failed - see the execution history and the Discord notification for details\"\n    }\n  }\n}\n",
+            "description": "",
+            "encryption_configuration": [
+              {
+                "kms_data_key_reuse_period_seconds": 0,
+                "kms_key_id": "",
+                "type": "AWS_OWNED_KEY"
+              }
+            ],
+            "id": "arn:aws:states:us-east-1:989211373225:stateMachine:social-media-pipeline-dev-pipeline",
+            "logging_configuration": [
+              {
+                "include_execution_data": false,
+                "level": "OFF",
+                "log_destination": ""
+              }
+            ],
+            "name": "social-media-pipeline-dev-pipeline",
+            "name_prefix": "",
+            "publish": false,
+            "revision_id": "",
+            "role_arn": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-pipeline-sfn-role",
+            "state_machine_version_arn": "",
+            "status": "ACTIVE",
+            "tags": null,
+            "tags_all": {},
+            "timeouts": null,
+            "tracing_configuration": [
+              {
+                "enabled": false
+              }
+            ],
+            "type": "STANDARD",
+            "version_description": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.analytics",
+            "module.compute.aws_lambda_function.delivery",
+            "module.compute.aws_lambda_function.ingestion",
+            "module.compute.aws_lambda_function.normalization_hn",
+            "module.compute.aws_lambda_function.normalization_x",
+            "module.compute.aws_lambda_function.notification",
+            "module.compute.aws_lambda_layer_version.delivery_common",
+            "module.compute.aws_lambda_layer_version.silver_common",
+            "module.compute.data.archive_file.analytics",
+            "module.compute.data.archive_file.delivery",
+            "module.compute.data.archive_file.delivery_common_layer",
+            "module.compute.data.archive_file.ingestion",
+            "module.compute.data.archive_file.normalization_hn",
+            "module.compute.data.archive_file.normalization_x",
+            "module.compute.data.archive_file.notification",
+            "module.compute.data.archive_file.silver_common_layer",
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_security_group.lambda_vpc",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.orchestration.aws_iam_role.sfn",
+            "module.security.aws_iam_role.analytics",
+            "module.security.aws_iam_role.delivery",
+            "module.security.aws_iam_role.ingestion",
+            "module.security.aws_iam_role.normalization_hn",
+            "module.security.aws_iam_role.normalization_x",
+            "module.security.aws_iam_role.notification",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix",
+            "module.visualization.aws_instance.visualization",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_sns_topic",
+      "name": "lambda_errors",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "application_failure_feedback_role_arn": "",
+            "application_success_feedback_role_arn": "",
+            "application_success_feedback_sample_rate": 0,
+            "archive_policy": "",
+            "arn": "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors",
+            "beginning_archive_time": "",
+            "content_based_deduplication": false,
+            "delivery_policy": "",
+            "display_name": "",
+            "fifo_throughput_scope": "",
+            "fifo_topic": false,
+            "firehose_failure_feedback_role_arn": "",
+            "firehose_success_feedback_role_arn": "",
+            "firehose_success_feedback_sample_rate": 0,
+            "http_failure_feedback_role_arn": "",
+            "http_success_feedback_role_arn": "",
+            "http_success_feedback_sample_rate": 0,
+            "id": "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors",
+            "kms_master_key_id": "",
+            "lambda_failure_feedback_role_arn": "",
+            "lambda_success_feedback_role_arn": "",
+            "lambda_success_feedback_sample_rate": 0,
+            "name": "social-media-pipeline-dev-lambda-errors",
+            "name_prefix": "",
+            "owner": "989211373225",
+            "policy": "{\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\"],\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"989211373225\"}},\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Resource\":\"arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors\",\"Sid\":\"__default_statement_ID\"}],\"Version\":\"2008-10-17\"}",
+            "signature_version": 0,
+            "sqs_failure_feedback_role_arn": "",
+            "sqs_success_feedback_role_arn": "",
+            "sqs_success_feedback_sample_rate": 0,
+            "tags": {},
+            "tags_all": {},
+            "tracing_config": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.orchestration",
+      "mode": "managed",
+      "type": "aws_sns_topic_subscription",
+      "name": "notify_on_error",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors:fc4c0b84-fe77-4a59-8bd5-ba0779fcc16f",
+            "confirmation_timeout_in_minutes": 1,
+            "confirmation_was_authenticated": true,
+            "delivery_policy": "",
+            "endpoint": "arn:aws:lambda:us-east-1:989211373225:function:social-media-pipeline-dev-notification",
+            "endpoint_auto_confirms": false,
+            "filter_policy": "",
+            "filter_policy_scope": "",
+            "id": "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors:fc4c0b84-fe77-4a59-8bd5-ba0779fcc16f",
+            "owner_id": "989211373225",
+            "pending_confirmation": false,
+            "protocol": "lambda",
+            "raw_message_delivery": false,
+            "redrive_policy": "",
+            "replay_policy": "",
+            "subscription_role_arn": "",
+            "topic_arn": "arn:aws:sns:us-east-1:989211373225:social-media-pipeline-dev-lambda-errors"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.compute.aws_cloudwatch_log_group.lambdas",
+            "module.compute.aws_lambda_function.notification",
+            "module.compute.data.archive_file.notification",
+            "module.orchestration.aws_sns_topic.lambda_errors",
+            "module.security.aws_iam_role.notification"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "analytics",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-analytics-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-07-01T19:37:36Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "social-media-pipeline-dev-analytics-role",
+            "inline_policy": [
+              {
+                "name": "s3-silver-read-gold-write",
+                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/silver/*\",\"Sid\":\"ReadSilver\"},{\"Action\":[\"s3:PutObject\",\"s3:DeleteObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/gold/*\",\"Sid\":\"WriteGold\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}"
+              }
+            ],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+            ],
+            "max_session_duration": 3600,
+            "name": "social-media-pipeline-dev-analytics-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA6MUMXV2UZEB7BLJFZ"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "delivery",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-delivery-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-07-01T19:37:36Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "social-media-pipeline-dev-delivery-role",
+            "inline_policy": [
+              {
+                "name": "s3-gold-read",
+                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/gold/*\",\"Sid\":\"ReadGold\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}"
+              }
+            ],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+            ],
+            "max_session_duration": 3600,
+            "name": "social-media-pipeline-dev-delivery-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA6MUMXV2US7JXSQMNT"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "ingestion",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-ingestion-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-07-01T19:37:36Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "social-media-pipeline-dev-ingestion-role",
+            "inline_policy": [
+              {
+                "name": "s3-bronze-write",
+                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/bronze/*\",\"Sid\":\"WriteBronze\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}"
+              }
+            ],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+            ],
+            "max_session_duration": 3600,
+            "name": "social-media-pipeline-dev-ingestion-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA6MUMXV2UVKX3N7K4D"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "normalization_hn",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-normalization-hn-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-07-01T19:51:36Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "social-media-pipeline-dev-normalization-hn-role",
+            "inline_policy": [
+              {
+                "name": "s3-bronze-hn-read-silver-write",
+                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/bronze/hacker_news/*\",\"Sid\":\"ReadBronzeHN\"},{\"Action\":[\"s3:GetObject\",\"s3:PutObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/silver/*\",\"Sid\":\"ReadWriteSilver\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}"
+              }
+            ],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+            ],
+            "max_session_duration": 3600,
+            "name": "social-media-pipeline-dev-normalization-hn-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA6MUMXV2U2BYRLDRTU"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "normalization_x",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-normalization-x-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-07-01T19:51:36Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "social-media-pipeline-dev-normalization-x-role",
+            "inline_policy": [
+              {
+                "name": "s3-bronze-x-read-silver-write",
+                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/bronze/x/*\",\"Sid\":\"ReadBronzeX\"},{\"Action\":[\"s3:GetObject\",\"s3:PutObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/silver/*\",\"Sid\":\"ReadWriteSilver\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}"
+              }
+            ],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+            ],
+            "max_session_duration": 3600,
+            "name": "social-media-pipeline-dev-normalization-x-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA6MUMXV2U5KPKRDDWX"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "notification",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::989211373225:role/social-media-pipeline-dev-notification-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-07-01T19:37:36Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "social-media-pipeline-dev-notification-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+            ],
+            "max_session_duration": 3600,
+            "name": "social-media-pipeline-dev-notification-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA6MUMXV2U76RTDY2SB"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "analytics_s3",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-analytics-role:s3-silver-read-gold-write",
+            "name": "s3-silver-read-gold-write",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/silver/*\",\"Sid\":\"ReadSilver\"},{\"Action\":[\"s3:PutObject\",\"s3:DeleteObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/gold/*\",\"Sid\":\"WriteGold\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}",
+            "role": "social-media-pipeline-dev-analytics-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.analytics",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "delivery_s3",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-delivery-role:s3-gold-read",
+            "name": "s3-gold-read",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/gold/*\",\"Sid\":\"ReadGold\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}",
+            "role": "social-media-pipeline-dev-delivery-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.delivery",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "ingestion_s3",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-ingestion-role:s3-bronze-write",
+            "name": "s3-bronze-write",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/bronze/*\",\"Sid\":\"WriteBronze\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}",
+            "role": "social-media-pipeline-dev-ingestion-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.ingestion",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "normalization_hn_s3",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-normalization-hn-role:s3-bronze-hn-read-silver-write",
+            "name": "s3-bronze-hn-read-silver-write",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/bronze/hacker_news/*\",\"Sid\":\"ReadBronzeHN\"},{\"Action\":[\"s3:GetObject\",\"s3:PutObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/silver/*\",\"Sid\":\"ReadWriteSilver\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}",
+            "role": "social-media-pipeline-dev-normalization-hn-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.normalization_hn",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "normalization_x_s3",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-normalization-x-role:s3-bronze-x-read-silver-write",
+            "name": "s3-bronze-x-read-silver-write",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/bronze/x/*\",\"Sid\":\"ReadBronzeX\"},{\"Action\":[\"s3:GetObject\",\"s3:PutObject\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/silver/*\",\"Sid\":\"ReadWriteSilver\"},{\"Action\":[\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"Sid\":\"ListBucket\"}]}",
+            "role": "social-media-pipeline-dev-normalization-x-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.normalization_x",
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "analytics_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-analytics-role-20260701193746363000000003",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+            "role": "social-media-pipeline-dev-analytics-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.analytics"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "delivery_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-delivery-role-20260701193746315200000001",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+            "role": "social-media-pipeline-dev-delivery-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.delivery"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "ingestion_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-ingestion-role-20260701193746323200000002",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+            "role": "social-media-pipeline-dev-ingestion-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.ingestion"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "normalization_hn_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-normalization-hn-role-20260701195147017800000002",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+            "role": "social-media-pipeline-dev-normalization-hn-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.normalization_hn"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "normalization_x_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-normalization-x-role-20260701195146990800000001",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+            "role": "social-media-pipeline-dev-normalization-x-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.normalization_x"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.security",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "notification_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "social-media-pipeline-dev-notification-role-20260701193746727400000004",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+            "role": "social-media-pipeline-dev-notification-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.security.aws_iam_role.notification"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.storage",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "data_lake",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918",
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "bucket_domain_name": "social-media-pipeline-dev-datalake-1993e918.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "social-media-pipeline-dev-datalake-1993e918.s3.us-east-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": true,
+            "grant": [
+              {
+                "id": "58a623eaf2ccd88fb09d20a466612b8b81e5614b552c121dc93767e1b37c9737",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+            "id": "social-media-pipeline-dev-datalake-1993e918",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 0,
+                "enabled": true,
+                "expiration": [
+                  {
+                    "date": "",
+                    "days": 90,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "id": "bronze-lifecycle",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "bronze/",
+                "tags": {},
+                "transition": [
+                  {
+                    "date": "",
+                    "days": 30,
+                    "storage_class": "GLACIER"
+                  }
+                ]
+              },
+              {
+                "abort_incomplete_multipart_upload_days": 0,
+                "enabled": true,
+                "expiration": [
+                  {
+                    "date": "",
+                    "days": 180,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "id": "silver-lifecycle",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "silver/",
+                "tags": {},
+                "transition": []
+              },
+              {
+                "abort_incomplete_multipart_upload_days": 0,
+                "enabled": true,
+                "expiration": [
+                  {
+                    "date": "",
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "id": "gold-lifecycle",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "gold/",
+                "tags": {},
+                "transition": []
+              }
+            ],
+            "logging": [],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "{\"Statement\":[{\"Action\":\"s3:*\",\"Condition\":{\"Bool\":{\"aws:SecureTransport\":\"false\"}},\"Effect\":\"Deny\",\"Principal\":\"*\",\"Resource\":[\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/*\"],\"Sid\":\"DenyInsecureTransport\"}],\"Version\":\"2012-10-17\"}",
+            "region": "us-east-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "",
+                        "sse_algorithm": "AES256"
+                      }
+                    ],
+                    "bucket_key_enabled": true
+                  }
+                ]
+              }
+            ],
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.storage",
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "data_lake",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "expected_bucket_owner": "",
+            "id": "social-media-pipeline-dev-datalake-1993e918",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [],
+                "expiration": [
+                  {
+                    "date": null,
+                    "days": 90,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "bronze/",
+                    "tag": []
+                  }
+                ],
+                "id": "bronze-lifecycle",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": [
+                  {
+                    "date": null,
+                    "days": 30,
+                    "storage_class": "GLACIER"
+                  }
+                ]
+              },
+              {
+                "abort_incomplete_multipart_upload": [],
+                "expiration": [
+                  {
+                    "date": null,
+                    "days": 180,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "silver/",
+                    "tag": []
+                  }
+                ],
+                "id": "silver-lifecycle",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": []
+              },
+              {
+                "abort_incomplete_multipart_upload": [],
+                "expiration": [
+                  {
+                    "date": null,
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "gold/",
+                    "tag": []
+                  }
+                ],
+                "id": "gold-lifecycle",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": []
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.storage",
+      "mode": "managed",
+      "type": "aws_s3_bucket_policy",
+      "name": "https_only",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "id": "social-media-pipeline-dev-datalake-1993e918",
+            "policy": "{\"Statement\":[{\"Action\":\"s3:*\",\"Condition\":{\"Bool\":{\"aws:SecureTransport\":\"false\"}},\"Effect\":\"Deny\",\"Principal\":\"*\",\"Resource\":[\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918\",\"arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/*\"],\"Sid\":\"DenyInsecureTransport\"}],\"Version\":\"2012-10-17\"}"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.aws_s3_bucket_public_access_block.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.storage",
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "data_lake",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "id": "social-media-pipeline-dev-datalake-1993e918",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.storage",
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "data_lake",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "expected_bucket_owner": "",
+            "id": "social-media-pipeline-dev-datalake-1993e918",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "",
+                    "sse_algorithm": "AES256"
+                  }
+                ],
+                "bucket_key_enabled": true
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.storage",
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "data_lake",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "expected_bucket_owner": "",
+            "id": "social-media-pipeline-dev-datalake-1993e918",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.storage",
+      "mode": "managed",
+      "type": "aws_s3_object",
+      "name": "prefixes",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "bronze/hacker_news/.keep",
+          "schema_version": 0,
+          "attributes": {
+            "acl": null,
+            "arn": "arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/bronze/hacker_news/.keep",
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "bucket_key_enabled": false,
+            "cache_control": "",
+            "checksum_algorithm": null,
+            "checksum_crc32": "",
+            "checksum_crc32c": "",
+            "checksum_crc64nvme": "",
+            "checksum_sha1": "",
+            "checksum_sha256": "",
+            "content": "",
+            "content_base64": null,
+            "content_disposition": "",
+            "content_encoding": "",
+            "content_language": "",
+            "content_type": "application/octet-stream",
+            "etag": "d41d8cd98f00b204e9800998ecf8427e",
+            "force_destroy": false,
+            "id": "bronze/hacker_news/.keep",
+            "key": "bronze/hacker_news/.keep",
+            "kms_key_id": null,
+            "metadata": {},
+            "object_lock_legal_hold_status": "",
+            "object_lock_mode": "",
+            "object_lock_retain_until_date": "",
+            "override_provider": [],
+            "server_side_encryption": "AES256",
+            "source": null,
+            "source_hash": null,
+            "storage_class": "STANDARD",
+            "tags": {},
+            "tags_all": {},
+            "version_id": "a7LT3zIPP3phHpVsMA1iO8Lt65_nrfjy",
+            "website_redirect": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        },
+        {
+          "index_key": "bronze/x/.keep",
+          "schema_version": 0,
+          "attributes": {
+            "acl": null,
+            "arn": "arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/bronze/x/.keep",
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "bucket_key_enabled": false,
+            "cache_control": "",
+            "checksum_algorithm": null,
+            "checksum_crc32": "",
+            "checksum_crc32c": "",
+            "checksum_crc64nvme": "",
+            "checksum_sha1": "",
+            "checksum_sha256": "",
+            "content": "",
+            "content_base64": null,
+            "content_disposition": "",
+            "content_encoding": "",
+            "content_language": "",
+            "content_type": "application/octet-stream",
+            "etag": "d41d8cd98f00b204e9800998ecf8427e",
+            "force_destroy": false,
+            "id": "bronze/x/.keep",
+            "key": "bronze/x/.keep",
+            "kms_key_id": null,
+            "metadata": {},
+            "object_lock_legal_hold_status": "",
+            "object_lock_mode": "",
+            "object_lock_retain_until_date": "",
+            "override_provider": [],
+            "server_side_encryption": "AES256",
+            "source": null,
+            "source_hash": null,
+            "storage_class": "STANDARD",
+            "tags": {},
+            "tags_all": {},
+            "version_id": "1BxUQLmQW.tlTbcvI12Bb2oWYsPn.Hei",
+            "website_redirect": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        },
+        {
+          "index_key": "gold/.keep",
+          "schema_version": 0,
+          "attributes": {
+            "acl": null,
+            "arn": "arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/gold/.keep",
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "bucket_key_enabled": false,
+            "cache_control": "",
+            "checksum_algorithm": null,
+            "checksum_crc32": "",
+            "checksum_crc32c": "",
+            "checksum_crc64nvme": "",
+            "checksum_sha1": "",
+            "checksum_sha256": "",
+            "content": "",
+            "content_base64": null,
+            "content_disposition": "",
+            "content_encoding": "",
+            "content_language": "",
+            "content_type": "application/octet-stream",
+            "etag": "d41d8cd98f00b204e9800998ecf8427e",
+            "force_destroy": false,
+            "id": "gold/.keep",
+            "key": "gold/.keep",
+            "kms_key_id": null,
+            "metadata": {},
+            "object_lock_legal_hold_status": "",
+            "object_lock_mode": "",
+            "object_lock_retain_until_date": "",
+            "override_provider": [],
+            "server_side_encryption": "AES256",
+            "source": null,
+            "source_hash": null,
+            "storage_class": "STANDARD",
+            "tags": {},
+            "tags_all": {},
+            "version_id": "Z_PG0VhSPjRxEyl1MYV_lF7GvvQhubk_",
+            "website_redirect": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        },
+        {
+          "index_key": "silver/posts/.keep",
+          "schema_version": 0,
+          "attributes": {
+            "acl": null,
+            "arn": "arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/silver/posts/.keep",
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "bucket_key_enabled": false,
+            "cache_control": "",
+            "checksum_algorithm": null,
+            "checksum_crc32": "",
+            "checksum_crc32c": "",
+            "checksum_crc64nvme": "",
+            "checksum_sha1": "",
+            "checksum_sha256": "",
+            "content": "",
+            "content_base64": null,
+            "content_disposition": "",
+            "content_encoding": "",
+            "content_language": "",
+            "content_type": "application/octet-stream",
+            "etag": "d41d8cd98f00b204e9800998ecf8427e",
+            "force_destroy": false,
+            "id": "silver/posts/.keep",
+            "key": "silver/posts/.keep",
+            "kms_key_id": null,
+            "metadata": {},
+            "object_lock_legal_hold_status": "",
+            "object_lock_mode": "",
+            "object_lock_retain_until_date": "",
+            "override_provider": [],
+            "server_side_encryption": "AES256",
+            "source": null,
+            "source_hash": null,
+            "storage_class": "STANDARD",
+            "tags": {},
+            "tags_all": {},
+            "version_id": "EwkLC7zurqBQ7xxroTMxd.6TbgRv.5Ho",
+            "website_redirect": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        },
+        {
+          "index_key": "silver/users/.keep",
+          "schema_version": 0,
+          "attributes": {
+            "acl": null,
+            "arn": "arn:aws:s3:::social-media-pipeline-dev-datalake-1993e918/silver/users/.keep",
+            "bucket": "social-media-pipeline-dev-datalake-1993e918",
+            "bucket_key_enabled": false,
+            "cache_control": "",
+            "checksum_algorithm": null,
+            "checksum_crc32": "",
+            "checksum_crc32c": "",
+            "checksum_crc64nvme": "",
+            "checksum_sha1": "",
+            "checksum_sha256": "",
+            "content": "",
+            "content_base64": null,
+            "content_disposition": "",
+            "content_encoding": "",
+            "content_language": "",
+            "content_type": "application/octet-stream",
+            "etag": "d41d8cd98f00b204e9800998ecf8427e",
+            "force_destroy": false,
+            "id": "silver/users/.keep",
+            "key": "silver/users/.keep",
+            "kms_key_id": null,
+            "metadata": {},
+            "object_lock_legal_hold_status": "",
+            "object_lock_mode": "",
+            "object_lock_retain_until_date": "",
+            "override_provider": [],
+            "server_side_encryption": "AES256",
+            "source": null,
+            "source_hash": null,
+            "storage_class": "STANDARD",
+            "tags": {},
+            "tags_all": {},
+            "version_id": "8m1HzjAZmUBA06OTAE2BxrwfCObgahHO",
+            "website_redirect": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.storage.aws_s3_bucket.data_lake",
+            "module.storage.random_id.suffix"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.storage",
+      "mode": "managed",
+      "type": "random_id",
+      "name": "suffix",
+      "provider": "provider[\"registry.terraform.io/hashicorp/random\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "b64_std": "GZPpGA==",
+            "b64_url": "GZPpGA",
+            "byte_length": 4,
+            "dec": "429123864",
+            "hex": "1993e918",
+            "id": "GZPpGA",
+            "keepers": null,
+            "prefix": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.visualization[0]",
+      "mode": "data",
+      "type": "aws_ami",
+      "name": "ubuntu",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architecture": "x86_64",
+            "arn": "arn:aws:ec2:us-east-1::image/ami-0a02a779008fa3b99",
+            "block_device_mappings": [
+              {
+                "device_name": "/dev/sda1",
+                "ebs": {
+                  "delete_on_termination": "true",
+                  "encrypted": "false",
+                  "iops": "0",
+                  "snapshot_id": "snap-0c8afe328c02a6cc1",
+                  "throughput": "0",
+                  "volume_initialization_rate": "0",
+                  "volume_size": "8",
+                  "volume_type": "gp3"
+                },
+                "no_device": "",
+                "virtual_name": ""
+              },
+              {
+                "device_name": "/dev/sdb",
+                "ebs": {},
+                "no_device": "",
+                "virtual_name": "ephemeral0"
+              },
+              {
+                "device_name": "/dev/sdc",
+                "ebs": {},
+                "no_device": "",
+                "virtual_name": "ephemeral1"
+              }
+            ],
+            "boot_mode": "uefi-preferred",
+            "creation_date": "2026-06-26T10:53:31.000Z",
+            "deprecation_time": "2028-06-26T10:53:31.000Z",
+            "description": "Canonical, Ubuntu, 24.04, amd64 noble image",
+            "ena_support": true,
+            "executable_users": null,
+            "filter": [
+              {
+                "name": "name",
+                "values": [
+                  "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
+                ]
+              },
+              {
+                "name": "virtualization-type",
+                "values": [
+                  "hvm"
+                ]
+              }
+            ],
+            "hypervisor": "xen",
+            "id": "ami-0a02a779008fa3b99",
+            "image_id": "ami-0a02a779008fa3b99",
+            "image_location": "amazon/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260626",
+            "image_owner_alias": "amazon",
+            "image_type": "machine",
+            "imds_support": "v2.0",
+            "include_deprecated": false,
+            "kernel_id": "",
+            "last_launched_time": "",
+            "most_recent": true,
+            "name": "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260626",
+            "name_regex": null,
+            "owner_id": "099720109477",
+            "owners": [
+              "099720109477"
+            ],
+            "platform": "",
+            "platform_details": "Linux/UNIX",
+            "product_codes": [],
+            "public": true,
+            "ramdisk_id": "",
+            "root_device_name": "/dev/sda1",
+            "root_device_type": "ebs",
+            "root_snapshot_id": "snap-0c8afe328c02a6cc1",
+            "sriov_net_support": "simple",
+            "state": "available",
+            "state_reason": {
+              "code": "UNSET",
+              "message": "UNSET"
+            },
+            "tags": {},
+            "timeouts": null,
+            "tpm_support": "",
+            "uefi_data": null,
+            "usage_operation": "RunInstances",
+            "virtualization_type": "hvm"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.visualization[0]",
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "visualization",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "ami": "ami-0a02a779008fa3b99",
+            "arn": "arn:aws:ec2:us-east-1::instance/i-02c53c72ff94638a4",
+            "associate_public_ip_address": true,
+            "availability_zone": "us-east-1a",
+            "capacity_reservation_specification": [
+              {
+                "capacity_reservation_preference": "open",
+                "capacity_reservation_target": []
+              }
+            ],
+            "cpu_core_count": 1,
+            "cpu_options": [
+              {
+                "amd_sev_snp": "",
+                "core_count": 1,
+                "threads_per_core": 2
+              }
+            ],
+            "cpu_threads_per_core": 2,
+            "credit_specification": [
+              {
+                "cpu_credits": "unlimited"
+              }
+            ],
+            "disable_api_stop": false,
+            "disable_api_termination": false,
+            "ebs_block_device": [],
+            "ebs_optimized": false,
+            "enable_primary_ipv6": null,
+            "enclave_options": [
+              {
+                "enabled": false
+              }
+            ],
+            "ephemeral_block_device": [],
+            "get_password_data": false,
+            "hibernation": false,
+            "host_id": "",
+            "host_resource_group_arn": null,
+            "iam_instance_profile": "",
+            "id": "i-02c53c72ff94638a4",
+            "instance_initiated_shutdown_behavior": "stop",
+            "instance_lifecycle": "",
+            "instance_market_options": [],
+            "instance_state": "running",
+            "instance_type": "t3.micro",
+            "ipv6_address_count": 0,
+            "ipv6_addresses": [],
+            "key_name": "social-media-pipeline-dev-ec2-key",
+            "launch_template": [],
+            "maintenance_options": [
+              {
+                "auto_recovery": "default"
+              }
+            ],
+            "metadata_options": [
+              {
+                "http_endpoint": "enabled",
+                "http_protocol_ipv6": "disabled",
+                "http_put_response_hop_limit": 2,
+                "http_tokens": "required",
+                "instance_metadata_tags": "disabled"
+              }
+            ],
+            "monitoring": false,
+            "network_interface": [],
+            "outpost_arn": "",
+            "password_data": "",
+            "placement_group": "",
+            "placement_partition_number": 0,
+            "primary_network_interface_id": "eni-0ee2b9d08acae9e29",
+            "private_dns": "ip-10-0-0-194.ec2.internal",
+            "private_dns_name_options": [
+              {
+                "enable_resource_name_dns_a_record": false,
+                "enable_resource_name_dns_aaaa_record": false,
+                "hostname_type": "ip-name"
+              }
+            ],
+            "private_ip": "10.0.0.194",
+            "public_dns": "ec2-3-220-174-112.compute-1.amazonaws.com",
+            "public_ip": "3.220.174.112",
+            "root_block_device": [
+              {
+                "delete_on_termination": true,
+                "device_name": "/dev/sda1",
+                "encrypted": false,
+                "iops": 3000,
+                "kms_key_id": "",
+                "tags": {},
+                "tags_all": {},
+                "throughput": 125,
+                "volume_id": "vol-067c0331e830eeabb",
+                "volume_size": 20,
+                "volume_type": "gp3"
+              }
+            ],
+            "secondary_private_ips": [],
+            "security_groups": [],
+            "source_dest_check": true,
+            "spot_instance_request_id": "",
+            "subnet_id": "subnet-00b4314b43b58ea16",
+            "tags": {
+              "Layer": "Visualization",
+              "Name": "social-media-pipeline-dev-visualization"
+            },
+            "tags_all": {
+              "Layer": "Visualization",
+              "Name": "social-media-pipeline-dev-visualization"
+            },
+            "tenancy": "default",
+            "timeouts": null,
+            "user_data": "e5cf914de3e9204c02564fd985335977a04d918f",
+            "user_data_base64": null,
+            "user_data_replace_on_change": true,
+            "volume_tags": null,
+            "vpc_security_group_ids": [
+              "sg-01b2a7e4eeab65f3b"
+            ]
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "user_data"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMCwicmVhZCI6OTAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.networking.aws_security_group.ec2",
+            "module.networking.aws_subnet.public",
+            "module.networking.aws_vpc.main",
+            "module.networking.data.aws_availability_zones.available",
+            "module.visualization.aws_key_pair.ec2",
+            "module.visualization.data.aws_ami.ubuntu"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.visualization[0]",
+      "mode": "managed",
+      "type": "aws_key_pair",
+      "name": "ec2",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1::key-pair/social-media-pipeline-dev-ec2-key",
+            "fingerprint": "PZY4BP/7xblThZyVT1s5vnWUxdsIcE3ea9Tl/N7huGY=",
+            "id": "social-media-pipeline-dev-ec2-key",
+            "key_name": "social-media-pipeline-dev-ec2-key",
+            "key_name_prefix": "",
+            "key_pair_id": "key-0f89a85b894cfa64a",
+            "key_type": "ed25519",
+            "public_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGs1ApjUcwUfCl+hzhcMCm4uoYsboemKN3io6nuNS2jm mihajlo@victus",
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ=="
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}

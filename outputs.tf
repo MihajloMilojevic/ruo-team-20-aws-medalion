@@ -39,3 +39,7 @@ output "ec2_private_ip" {
 output "superset_url" {
   value = try(module.visualization[0].superset_url, "")
 }
+
+output "pipeline_state_machine_arn" {
+  value = module.orchestration.pipeline_state_machine_arn
+}

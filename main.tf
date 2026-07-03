@@ -49,9 +49,13 @@ module "orchestration" {
   ingestion_lambda_name     = module.compute.ingestion_lambda_name
   notification_lambda_arn   = module.compute.notification_lambda_arn
   notification_lambda_name  = module.compute.notification_lambda_name
+  normalization_hn_lambda_arn  = module.compute.normalization_hn_lambda_arn
   normalization_hn_lambda_name = module.compute.normalization_hn_lambda_name
+  normalization_x_lambda_arn   = module.compute.normalization_x_lambda_arn
   normalization_x_lambda_name  = module.compute.normalization_x_lambda_name
+  analytics_lambda_arn      = module.compute.analytics_lambda_arn
   analytics_lambda_name     = module.compute.analytics_lambda_name
+  delivery_lambda_arn       = module.compute.delivery_lambda_arn
   delivery_lambda_name      = module.compute.delivery_lambda_name
 }
 
